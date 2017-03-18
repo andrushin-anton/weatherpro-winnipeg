@@ -1,4 +1,7 @@
 class SessionsController < ApplicationController
+  skip_before_filter :require_login
+  layout "sessions"
+
   def new
   end
   
@@ -6,7 +9,7 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:email])
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to root_url, notice: 'Logged in!'
+      redirect_to root_url
     else
       flash.now.alert = 'Email or password is invalid'
       render :new

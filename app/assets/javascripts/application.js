@@ -11,8 +11,9 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery_ujs
-//= require turbolinks
+//= require moment
+// require turbolinks
 //= require_tree .
-//= require gentelella
-//= require gentelella-custom
+
+// document.addEventListener("turbolinks:load", function() {
+// });
