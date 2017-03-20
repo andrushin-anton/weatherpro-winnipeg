@@ -15,6 +15,6 @@ class Customer < ApplicationRecord
 
     private
         def default_values
-        self.status ||= 'ACTIVE'
+            self.status ||= 'ACTIVE'
         end
 end

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   
+  resources :administrators
   resources :customers
   resources :sessions
   resources :users
@@ -8,6 +9,9 @@ Rails.application.routes.draw do
   get 'signup', to: 'users#new', as: 'signup'
   get 'login', to: 'sessions#new', as: 'login'
   get 'logout', to: 'sessions#destroy', as: 'logout'
+  get 'users/password/:id', to: 'users#password', as: 'password'
+  patch 'users/update_password/:id', to: 'users#update_password', as: 'update_password'
+  patch 'users/activate/:id', to: 'users#activate', as: 'user_activate'
 
   root to: 'articles#index'
 
