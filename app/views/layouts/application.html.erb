@@ -38,12 +38,12 @@
                 <ul class="nav side-menu" style="">
                   <li class="active"><a><i class="fa fa-home"></i> Menu <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu" style="display: block;">
-                      <li class="current-page"><a href="index.html">Appointments</a></li>
-                      <li><a href="<%= customers_path %>">Customers</a></li>
-                      <li><a href="index3.html">Sellers</a></li>
-                      <li><a href="index3.html">Installers</a></li>
-                      <li><a href="index3.html">Managers</a></li>
-                      <li><a href="index3.html">Logs</a></li>
+                      <li class="<%= 'current-page' if params[:controller] == 'appointments' %>"><a href="index.html">Appointments</a></li>
+                      <li class="<%= 'current-page' if params[:controller] == 'customers' %>"><a href="<%= customers_path %>">Customers</a></li>
+                      <li class="<%= 'current-page' if params[:controller] == 'sellers' %>"><a href="index3.html">Sellers</a></li>
+                      <li class="<%= 'current-page' if params[:controller] == 'installers' %>"><a href="index3.html">Installers</a></li>
+                      <li class="<%= 'current-page' if params[:controller] == 'managers' %>"><a href="index3.html">Managers</a></li>
+                      <li class="<%= 'current-page' if params[:controller] == 'logs' %>"><a href="index3.html">Logs</a></li>
                     </ul>
                   </li>
                 </ul>

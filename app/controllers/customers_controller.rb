@@ -4,7 +4,7 @@ class CustomersController < ApplicationController
   # GET /customers
   # GET /customers.json
   def index
-    @customers = Customer.all
+    @customers = Customer.search(params[:search], params[:page])
   end
 
   # GET /customers/1
@@ -54,7 +54,8 @@ class CustomersController < ApplicationController
   # DELETE /customers/1
   # DELETE /customers/1.json
   def destroy
-    @customer.destroy
+    @customer.status = 'DELETED'
+    @customer.save
     respond_to do |format|
       format.html { redirect_to customers_url, notice: 'Customer was successfully removed.' }
       format.json { head :no_content }
