@@ -16,6 +16,13 @@ GIT
       kaminari-core (= 1.0.1)
     kaminari-core (1.0.1)
 
+GIT
+  remote: https://github.com/rails/rails-observers.git
+  revision: cefffa51343ba402fc336e98432e7805c1905306
+  specs:
+    rails-observers (0.1.3.alpha)
+      activemodel (>= 4.0, < 5.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -57,6 +64,9 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     arel (7.1.4)
+    audited (4.3.0)
+      activerecord (>= 4.0, < 5.1)
+      rails-observers (~> 0.1.2)
     bcrypt (3.1.11)
     builder (3.2.3)
     byebug (9.0.6)
@@ -170,6 +180,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  audited (~> 4.3)
   bcrypt (~> 3.1.7)
   byebug
   coffee-rails (~> 4.2)
@@ -180,6 +191,7 @@ DEPENDENCIES
   pg
   puma (~> 3.0)
   rails (~> 5.0.2)
+  rails-observers!
   sass-rails (~> 5.0)
   spring
   spring-watcher-listen (~> 2.0.0)
