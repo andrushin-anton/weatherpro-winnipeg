@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   
   resources :administrators
+  resources :managers
   resources :customers
   resources :sessions
   resources :users
