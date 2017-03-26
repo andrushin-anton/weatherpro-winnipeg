@@ -1,0 +1,171 @@
+<div class="">
+  <div class="page-title">
+    <div class="title_left">
+      <h3>Appointments</h3>
+    </div>
+
+    <div class="title_right">
+    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+      <%= form_tag appointments_path, :method => 'get' do %>
+      <div class="input-group">
+          <input type="text" name="search" value="<%= params[:search] %>" class="form-control" placeholder="Search for...">
+          <span class="input-group-btn">
+          <%= submit_tag "Go!", :name => nil, :class => "btn btn-default search" %>
+          </span>
+      </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>Click to add/edit</h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+
+          <div id="calendar" class="fc fc-unthemed fc-ltr"></div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- calendar modal -->
+    <div id="CalenderModalNew" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel2">Confirmation</h4>
+          </div>
+
+          <div class="modal-body">
+            <button type="button" class="btn btn-default antoclose" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary antosubmit">Add new Appointment</button>
+          </div>
+          
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="CalenderModalEdit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel2">Appointment Details</h4>
+          </div>
+          <div class="modal-body">
+
+            <div id="testmodal2" style="padding: 5px 20px;">
+              
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary antosubmit2">View More</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="fc_create" data-toggle="modal" data-target="#CalenderModalNew"></div>
+    <div id="fc_edit" data-toggle="modal" data-target="#CalenderModalEdit"></div>
+    <!-- /calendar modal -->
+
+
+    <script>
+      /* CALENDAR */
+		  
+		    function  init_calendar() {
+					
+				if( typeof ($.fn.fullCalendar) === 'undefined'){ return; }
+				console.log('init_calendar');
+					
+				var date = new Date(),
+					d = date.getDate(),
+					m = date.getMonth(),
+					y = date.getFullYear(),
+					started,
+					categoryClass;
+
+				var calendar = $('#calendar').fullCalendar({
+				  header: {
+					left: 'prev,next today',
+					center: 'title',
+					right: 'month,agendaWeek,agendaDay,listMonth'
+				  },
+				  selectable: true,
+				  selectHelper: true,
+				  select: function(start, end, allDay) {
+					$('#fc_create').click();
+
+					started = start;
+					ended = end;
+
+					$(".antosubmit").on("click", function() {					
+						
+            window.location.href = '<%=new_appointment_path%>/'+started.unix();
+					
+					  calendar.fullCalendar('unselect');
+					  $('.antoclose').click();
+
+					  return false;
+					});
+				  },
+				  eventClick: function(calEvent, jsEvent, view) {
+					$('#fc_edit').click();
+
+					$(".antosubmit2").on("click", function() {
+					  
+            window.location.href = calEvent.edit_url;
+
+					  calendar.fullCalendar('updateEvent', calEvent);
+					  $('.antoclose2').click();
+					});
+
+					calendar.fullCalendar('unselect');
+				  },
+				  editable: true,
+				  events: [
+          <% @appointments.each do |appointment| %>
+					{
+            edit_url: '<%= edit_appointment_path(appointment) %>',
+            title: '<%= appointment.address %>',
+					  start: new Date(<%= appointment.schedule_time.year%>, <%= appointment.schedule_time.month-1%>, <%= appointment.schedule_time.day%>, <%= appointment.schedule_time.hour%>, <%= appointment.schedule_time.min %>),
+            allDay: false
+				  }
+          <% unless appointment.eql?(@appointments.last) %>
+          ,
+          <% end %>
+          <% end %> 
+          ]
+				});
+				
+			};
+      $(document).ready(function() {
+        init_calendar();
+      });
+    </script>
+
+
+<a href="#.">&nbsp;</a>
+

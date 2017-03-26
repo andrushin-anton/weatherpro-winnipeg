@@ -1,0 +1,112 @@
+<%= form_for(appointment) do |f| %>
+  <% if appointment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(appointment.errors.count, "error") %> prohibited this appointment from being saved:</h2>
+
+      <ul>
+      <% appointment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :status %>
+    <%= f.number_field :status %>
+  </div>
+
+  <div class="field">
+    <%= f.label :is_new_customer %>
+    <%= f.number_field :is_new_customer %>
+  </div>
+
+  <div class="field">
+    <%= f.label :schedule_time %>
+    <%= f.datetime_select :schedule_time %>
+  </div>
+
+  <div class="field">
+    <%= f.label :comments %>
+    <%= f.text_area :comments %>
+  </div>
+
+  <div class="field">
+    <%= f.label :seller_id %>
+    <%= f.number_field :seller_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :customer_id %>
+    <%= f.number_field :customer_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :address %>
+    <%= f.text_field :address %>
+  </div>
+
+  <div class="field">
+    <%= f.label :city %>
+    <%= f.text_field :city %>
+  </div>
+
+  <div class="field">
+    <%= f.label :province %>
+    <%= f.text_field :province %>
+  </div>
+
+  <div class="field">
+    <%= f.label :postal_code %>
+    <%= f.text_field :postal_code %>
+  </div>
+
+  <div class="field">
+    <%= f.label :windows_num %>
+    <%= f.number_field :windows_num %>
+  </div>
+
+  <div class="field">
+    <%= f.label :doors_num %>
+    <%= f.number_field :doors_num %>
+  </div>
+
+  <div class="field">
+    <%= f.label :how_soon %>
+    <%= f.text_field :how_soon %>
+  </div>
+
+  <div class="field">
+    <%= f.label :quotes_num %>
+    <%= f.text_field :quotes_num %>
+  </div>
+
+  <div class="field">
+    <%= f.label :hear_about_us %>
+    <%= f.text_field :hear_about_us %>
+  </div>
+
+  <div class="field">
+    <%= f.label :homeoweners_at_home %>
+    <%= f.text_field :homeoweners_at_home %>
+  </div>
+
+  <div class="field">
+    <%= f.label :supply_install %>
+    <%= f.text_field :supply_install %>
+  </div>
+
+  <div class="field">
+    <%= f.label :financing %>
+    <%= f.text_field :financing %>
+  </div>
+
+  <div class="field">
+    <%= f.label :installer_id %>
+    <%= f.number_field :installer_id %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

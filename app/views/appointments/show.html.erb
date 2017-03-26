@@ -1,0 +1,99 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @appointment.status %>
+</p>
+
+<p>
+  <strong>Is new customer:</strong>
+  <%= @appointment.is_new_customer %>
+</p>
+
+<p>
+  <strong>Schedule time:</strong>
+  <%= @appointment.schedule_time %>
+</p>
+
+<p>
+  <strong>Comments:</strong>
+  <%= @appointment.comments %>
+</p>
+
+<p>
+  <strong>Seller:</strong>
+  <%= @appointment.seller_id %>
+</p>
+
+<p>
+  <strong>Customer:</strong>
+  <%= @appointment.customer_id %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @appointment.address %>
+</p>
+
+<p>
+  <strong>City:</strong>
+  <%= @appointment.city %>
+</p>
+
+<p>
+  <strong>Province:</strong>
+  <%= @appointment.province %>
+</p>
+
+<p>
+  <strong>Postal code:</strong>
+  <%= @appointment.postal_code %>
+</p>
+
+<p>
+  <strong>Windows num:</strong>
+  <%= @appointment.windows_num %>
+</p>
+
+<p>
+  <strong>Doors num:</strong>
+  <%= @appointment.doors_num %>
+</p>
+
+<p>
+  <strong>How soon:</strong>
+  <%= @appointment.how_soon %>
+</p>
+
+<p>
+  <strong>Quotes num:</strong>
+  <%= @appointment.quotes_num %>
+</p>
+
+<p>
+  <strong>Hear about us:</strong>
+  <%= @appointment.hear_about_us %>
+</p>
+
+<p>
+  <strong>Homeoweners at home:</strong>
+  <%= @appointment.homeoweners_at_home %>
+</p>
+
+<p>
+  <strong>Supply install:</strong>
+  <%= @appointment.supply_install %>
+</p>
+
+<p>
+  <strong>Financing:</strong>
+  <%= @appointment.financing %>
+</p>
+
+<p>
+  <strong>Installer:</strong>
+  <%= @appointment.installer_id %>
+</p>
+
+<%= link_to 'Edit', edit_appointment_path(@appointment) %> |
+<%= link_to 'Back', appointments_path %>

@@ -38,7 +38,7 @@
                 <ul class="nav side-menu" style="">
                   <li class="active"><a><i class="fa fa-home"></i> Menu <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu" style="display: block;">
-                      <li class="<%= 'current-page' if params[:controller] == 'appointments' %>"><a href="index.html">Appointments</a></li>
+                      <li class="<%= 'current-page' if params[:controller] == 'appointments' %>"><a href="<%= appointments_path %>">Appointments</a></li>
                       <li class="<%= 'current-page' if params[:controller] == 'customers' %>"><a href="<%= customers_path %>">Customers</a></li>
                       <li class="<%= 'current-page' if params[:controller] == 'sellers' %>"><a href="<%= sellers_path%>">Sellers</a></li>
                       <li class="<%= 'current-page' if params[:controller] == 'installers' %>"><a href="<%= installers_path%>">Installers</a></li>

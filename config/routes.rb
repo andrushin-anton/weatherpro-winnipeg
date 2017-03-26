@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   
+  resources :appointments
   resources :administrators
   resources :managers
   resources :sellers
@@ -17,7 +18,7 @@ Rails.application.routes.draw do
   patch 'users/update_password/:id', to: 'users#update_password', as: 'update_password'
   patch 'users/activate/:id', to: 'users#activate', as: 'user_activate'
 
-  root to: 'articles#index'
+  root to: 'appointments#index'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

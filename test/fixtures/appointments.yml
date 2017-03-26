@@ -1,0 +1,43 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  status: 1
+  is_new_customer: 1
+  schedule_time: 2017-03-23 10:24:16
+  comments: MyText
+  seller_id: 1
+  customer_id: 1
+  address: MyString
+  city: MyString
+  province: MyString
+  postal_code: MyString
+  windows_num: 1
+  doors_num: 1
+  how_soon: MyString
+  quotes_num: MyString
+  hear_about_us: MyString
+  homeoweners_at_home: 
+  supply_install: MyString
+  financing: MyString
+  installer_id: 1
+
+two:
+  status: 1
+  is_new_customer: 1
+  schedule_time: 2017-03-23 10:24:16
+  comments: MyText
+  seller_id: 1
+  customer_id: 1
+  address: MyString
+  city: MyString
+  province: MyString
+  postal_code: MyString
+  windows_num: 1
+  doors_num: 1
+  how_soon: MyString
+  quotes_num: MyString
+  hear_about_us: MyString
+  homeoweners_at_home: 
+  supply_install: MyString
+  financing: MyString
+  installer_id: 1
