@@ -16,6 +16,11 @@ class Customer < ApplicationRecord
         end
     end
 
+    def full_name
+        self.first_name + ' ' + self.last_name + ' (phone:' + self.phone + ')'
+    end
+    
+
     private
         def default_values
             self.status ||= 'ACTIVE'

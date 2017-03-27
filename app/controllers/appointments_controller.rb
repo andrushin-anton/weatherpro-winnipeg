@@ -14,11 +14,50 @@ class AppointmentsController < ApplicationController
 
   # GET /appointments/new
   def new
+    schedule_time = Time.at(params[:unixtime].to_i).utc
+    date = schedule_time.strftime("%Y-%m-%d")
+    
     @appointment = Appointment.new
+    # Process times
+    case schedule_time.strftime("%H").to_i 
+      when  9
+        schedule_time = date + ' 09:00:00'
+        end_time = date + ' 09:59:59'
+      when 10..11
+        schedule_time = date + ' 10:00:00'
+        end_time = date + ' 11:59:59'
+      when 12..13
+        schedule_time = date + ' 12:00:00'
+        end_time = date + ' 13:59:59'
+      when 14..15
+        schedule_time = date + ' 14:00:00'
+        end_time = date + ' 15:59:59'   
+      when 16..17
+        schedule_time = date + ' 16:00:00'
+        end_time = date + ' 17:59:59'
+      when 18..19
+        schedule_time = date + ' 18:00:00'
+        end_time = date + ' 19:59:59'
+      when 20..21
+        schedule_time = date + ' 20:00:00'
+        end_time = date + ' 21:00:00'
+      else
+        @appointment.errors.add(:base, 'Undefined time')
+    end
+
+    @appointment.schedule_time = schedule_time
+    @appointment.end_time = end_time
+
+    @customers = Customer.where(:status => 'ACTIVE').all()
+    @sellers = User.where(:status => 'ACTIVE', :role => 'seller').all()
+    @installers = User.where(:status => 'ACTIVE', :role => 'installer').all()
   end
 
   # GET /appointments/1/edit
   def edit
+    @customers = Customer.where(:status => 'ACTIVE').all()
+    @sellers = User.where(:status => 'ACTIVE', :role => 'seller').all()
+    @installers = User.where(:status => 'ACTIVE', :role => 'installer').all()
   end
 
   # POST /appointments
@@ -28,7 +67,7 @@ class AppointmentsController < ApplicationController
 
     respond_to do |format|
       if @appointment.save
-        format.html { redirect_to @appointment, notice: 'Appointment was successfully created.' }
+        format.html { redirect_to appointments_path, notice: 'Appointment was successfully created.' }
         format.json { render :show, status: :created, location: @appointment }
       else
         format.html { render :new }
@@ -42,7 +81,7 @@ class AppointmentsController < ApplicationController
   def update
     respond_to do |format|
       if @appointment.update(appointment_params)
-        format.html { redirect_to @appointment, notice: 'Appointment was successfully updated.' }
+        format.html { redirect_to appointments_path, notice: 'Appointment was successfully updated.' }
         format.json { render :show, status: :ok, location: @appointment }
       else
         format.html { render :edit }
@@ -69,6 +108,6 @@ class AppointmentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def appointment_params
-      params.require(:appointment).permit(:status, :is_new_customer, :schedule_time, :comments, :seller_id, :customer_id, :address, :city, :province, :postal_code, :windows_num, :doors_num, :how_soon, :quotes_num, :hear_about_us, :homeoweners_at_home, :supply_install, :financing, :installer_id)
+      params.require(:appointment).permit(:status, :is_new_customer, :schedule_time, :end_time, :comments, :seller_id, :customer_id, :address, :city, :province, :postal_code, :windows_num, :doors_num, :how_soon, :quotes_num, :hear_about_us, :homeoweners_at_home, :supply_install, :financing, :installer_id)
     end
 end

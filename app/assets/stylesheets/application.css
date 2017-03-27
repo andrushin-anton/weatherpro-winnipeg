@@ -22,3 +22,27 @@
     color: #93A2B2;
     margin-bottom: 0!important;
 }
+
+tr[data-time="10:00:00"] {
+    background: #ededed;
+}
+
+tr[data-time="11:00:00"] {
+    background: #ededed;
+}
+
+tr[data-time="14:00:00"] {
+    background: #ededed;
+}
+
+tr[data-time="15:00:00"] {
+    background: #ededed;
+}
+
+tr[data-time="18:00:00"] {
+    background: #ededed;
+}
+
+tr[data-time="19:00:00"] {
+    background: #ededed;
+}

@@ -46,14 +46,14 @@
         <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Role</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.select :role, User.roles, :html => {:selected => @user.role, :class => 'form-control'} %>
+            <%= f.select :role, User.roles, { :selected => @user.role }, {:class => 'form-control'} %>
           </div>
         </div>
 
         <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Status</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.select :status, {:active => 'ACTIVE', :deleted => 'DELETED'}, :html => {:selected => @user.status.to_sym, :class => 'form-control'} %>
+            <%= f.select :status, {:active => 'ACTIVE', :deleted => 'DELETED'}, {:selected => @user.status.to_sym}, {:class => 'form-control'} %>
           </div>
         </div>
 

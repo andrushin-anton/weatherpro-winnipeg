@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get 'logout', to: 'sessions#destroy', as: 'logout'
   get 'users/password/:id', to: 'users#password', as: 'password'
   get 'logs', to: 'logs#index'
+  get 'appointments/new/:unixtime', to: 'appointments#new'
   patch 'users/update_password/:id', to: 'users#update_password', as: 'update_password'
   patch 'users/activate/:id', to: 'users#activate', as: 'user_activate'
 
