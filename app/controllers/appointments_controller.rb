@@ -1,5 +1,6 @@
 class AppointmentsController < ApplicationController
   before_action :set_appointment, only: [:show, :edit, :update, :destroy]
+  before_action :set_data, only: [:show, :edit, :new, :create, :update]
 
   # GET /appointments
   # GET /appointments.json
@@ -47,17 +48,11 @@ class AppointmentsController < ApplicationController
 
     @appointment.schedule_time = schedule_time
     @appointment.end_time = end_time
-
-    @customers = Customer.where(:status => 'ACTIVE').all()
-    @sellers = User.where(:status => 'ACTIVE', :role => 'seller').all()
-    @installers = User.where(:status => 'ACTIVE', :role => 'installer').all()
   end
 
   # GET /appointments/1/edit
   def edit
-    @customers = Customer.where(:status => 'ACTIVE').all()
-    @sellers = User.where(:status => 'ACTIVE', :role => 'seller').all()
-    @installers = User.where(:status => 'ACTIVE', :role => 'installer').all()
+    
   end
 
   # POST /appointments
@@ -106,8 +101,15 @@ class AppointmentsController < ApplicationController
       @appointment = Appointment.find(params[:id])
     end
 
+    def set_data
+      @customers = Customer.where(:status => 'ACTIVE').all()
+      @sellers = User.where(:status => 'ACTIVE', :role => 'seller').all()
+      @installers = User.where(:status => 'ACTIVE', :role => 'installer').all()
+    end
+    
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def appointment_params
-      params.require(:appointment).permit(:status, :is_new_customer, :schedule_time, :end_time, :comments, :seller_id, :customer_id, :address, :city, :province, :postal_code, :windows_num, :doors_num, :how_soon, :quotes_num, :hear_about_us, :homeoweners_at_home, :supply_install, :financing, :installer_id)
+      params.require(:appointment).permit(:new_customer_first_name, :new_customer_last_name, :new_customer_phone, :new_customer_email, :status, :is_new_customer, :schedule_time, :end_time, :comments, :seller_id, :customer_id, :address, :city, :province, :postal_code, :windows_num, :doors_num, :how_soon, :quotes_num, :hear_about_us, :homeoweners_at_home, :supply_install, :financing, :installer_id)
     end
 end

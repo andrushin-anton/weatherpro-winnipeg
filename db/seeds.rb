@@ -6,11 +6,8 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-Status.create! name: "Lead", color: "583030", description: "unassigned", status: "ACTIVE"
-Status.create! name: "Assigned(Customer)", color: "FF902F", description: "NEW customer", status: "ACTIVE"
-Status.create! name: "Reschedule", color: "3A29D2", description: "time and/or date changes for the appointment", status: "ACTIVE"
-Status.create! name: "Up-sell", color: "F5E836", description: "Returning customer for new appointment", status: "ACTIVE"
-Status.create! name: "Referral", color: "F5E836", description: "New customer coming from existing customer for new appointment", status: "ACTIVE"
-Status.create! name: "Cancelled", color: "EC2D26", description: "by seller", status: "ACTIVE"
-Status.create! name: "Sold", color: "4DB02F", description: "by seller", status: "ACTIVE"
-Status.create! name: "Follow up", color: "B326C9", description: "by seller", status: "ACTIVE"
+User.create! first_name: "Windows", last_name: "Doors", email: "9142045@gmail.com", password: "password", status: "ACTIVE", role: "admin"
+User.create! first_name: "Anton", last_name: "Andrushin", email: "andrushin.anton@gmail.com", password: "password", status: "ACTIVE", role: "admin"
+User.create! first_name: "Manager", last_name: "W&D", email: "manager@gmail.com", password: "password", status: "ACTIVE", role: "manager"
+User.create! first_name: "Seller", last_name: "W&D", email: "seller@gmail.com", password: "password", status: "ACTIVE", role: "seller"
+User.create! first_name: "Installer", last_name: "W&D", email: "installer@gmail.com", password: "password", status: "ACTIVE", role: "installer"

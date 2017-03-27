@@ -46,3 +46,7 @@ tr[data-time="18:00:00"] {
 tr[data-time="19:00:00"] {
     background: #ededed;
 }
+
+.fc-ltr .fc-time-grid .fc-event-container {
+    margin: 0 8.5% 0 2px !important;
+}

@@ -6,6 +6,8 @@ class Customer < ApplicationRecord
     validates :phone, presence: true
     validates :email, allow_blank: true, length: { maximum: 70 }, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
 
+    has_many :appointments
+
     paginates_per  15
 
     def self.search(search, current_page)
