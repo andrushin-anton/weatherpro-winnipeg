@@ -4,26 +4,34 @@ class CustomersController < ApplicationController
   # GET /customers
   # GET /customers.json
   def index
+    authorize! :index, Customer
+
     @customers = Customer.search(params[:search], params[:page])
   end
 
   # GET /customers/1
   # GET /customers/1.json
   def show
+    authorize! :show, @customer
   end
 
   # GET /customers/new
   def new
+    authorize! :new, Customer
+
     @customer = Customer.new
   end
 
   # GET /customers/1/edit
   def edit
+    authorize! :edit, @customer
   end
 
   # POST /customers
   # POST /customers.json
   def create
+    authorize! :create, Customer
+
     @customer = Customer.new(customer_params)
 
     respond_to do |format|
@@ -40,6 +48,8 @@ class CustomersController < ApplicationController
   # PATCH/PUT /customers/1
   # PATCH/PUT /customers/1.json
   def update
+    authorize! :update, @customer
+
     respond_to do |format|
       if @customer.update(customer_params)
         format.html { redirect_to customers_url, notice: 'Customer was successfully updated.' }
@@ -54,6 +64,8 @@ class CustomersController < ApplicationController
   # DELETE /customers/1
   # DELETE /customers/1.json
   def destroy
+    authorize! :destroy, @customer
+
     @customer.status = 'DELETED'
     @customer.save
     respond_to do |format|

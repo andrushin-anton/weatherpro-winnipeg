@@ -1,5 +1,7 @@
 class SellersController < ApplicationController
   def index
+    authorize! :sellers, User
+
     @sellers = User.search('seller', params[:search], params[:page])
   end
 
@@ -7,7 +9,9 @@ class SellersController < ApplicationController
   end
 
   def new
-     @seller = User.new
+    authorize! :sellers_new, User
+
+    @seller = User.new
   end
 
   def edit

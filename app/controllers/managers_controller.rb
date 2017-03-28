@@ -1,13 +1,18 @@
 class ManagersController < ApplicationController
   def index
+    authorize! :managers, User
+
     @managers = User.search('manager', params[:search], params[:page])
   end
 
   def show
+    authorize! :manager_show, @manager
   end
 
   def new
-     @manager = User.new
+    authorize! :manager_new, User
+    
+    @manager = User.new
   end
 
   def edit

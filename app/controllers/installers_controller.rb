@@ -1,5 +1,7 @@
 class InstallersController < ApplicationController
   def index
+    authorize! :installers, User
+
     @installers = User.search('installer', params[:search], params[:page])
   end
 
@@ -7,13 +9,17 @@ class InstallersController < ApplicationController
   end
 
   def new
-     @installer = User.new
+    authorize! :installers_new, User
+    @installer = User.new
   end
 
   def edit
+    authorize! :installers_edit, @installer
   end
 
   def create
+    authorize! :installers_create, User
+
     @installer = User.new(allowed_params)
 
     respond_to do |format|
@@ -28,6 +34,8 @@ class InstallersController < ApplicationController
   end
 
   def update
+    authorize! :installers_update, @installer
+
     respond_to do |format|
       if @installer.update(allowed_params)
         format.html { redirect_to installers_url, notice: 'Installer was successfully updated.' }
@@ -40,6 +48,7 @@ class InstallersController < ApplicationController
   end
 
   def destroy
+    authorize! :installers_destroy, @installer
   end
 
   private

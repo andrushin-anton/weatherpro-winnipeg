@@ -1,18 +1,23 @@
 class UsersController < ApplicationController
+  before_action :set_user, only: [:edit, :password, :update_password, :update, :destroy, :activate]
+  
   def new
+    authorize! :new, User
+
     @user = User.new
   end
 
   def edit
-    @user = User.find(params[:id])
+    authorize! :edit, @user
   end  
 
   def password
-    @user = User.find(params[:id])
+    authorize! :password, @user
   end  
 
   def update_password
-    @user = User.find(params[:id])
+    authorize! :update_password, @user
+    
     respond_to do |format|
       if @user.update(allowed_params)
         format.html { redirect_to redirect_to_back, notice: 'Password was successfully updated.' }
@@ -25,6 +30,8 @@ class UsersController < ApplicationController
   end
 
   def create
+    authorize! :create, User
+    
     @user = User.new(allowed_params)
     if @user.save
       redirect_to root_url, notice: 'Thank you for signing up!'
@@ -36,7 +43,8 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    @user = User.find(params[:id])
+    authorize! :update, @user    
+
     respond_to do |format|
       if @user.update(allowed_params)
         format.html { redirect_to redirect_to_back, notice: 'User was successfully updated.' }
@@ -49,7 +57,8 @@ class UsersController < ApplicationController
   end
 
   def activate
-    @user = User.find(params[:id])
+    authorize! :activate, @user
+
     @user.status = 'ACTIVE'
     @user.save
     respond_to do |format|
@@ -59,7 +68,8 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user = User.find(params[:id])
+    authorize! :destroy, @user
+
     @user.status = 'DELETED'
     @user.save
     respond_to do |format|
@@ -69,6 +79,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+    def set_user
+      @user = User.find(params[:id])
+    end
 
     def redirect_to_back(default = root_url)
       if request.env["HTTP_REFERER"].present? and request.env["HTTP_REFERER"] != request.env["REQUEST_URI"]

@@ -23,28 +23,58 @@
     margin-bottom: 0!important;
 }
 
+tr[data-time="09:00:00"] {
+    line-height: 5.8;
+}
+
 tr[data-time="10:00:00"] {
     background: #ededed;
+    line-height: 5.8;
 }
 
 tr[data-time="11:00:00"] {
     background: #ededed;
+    line-height: 5.8;
+}
+
+tr[data-time="12:00:00"] {
+    line-height: 5.8;
+}
+
+tr[data-time="13:00:00"] {
+    line-height: 5.8;
 }
 
 tr[data-time="14:00:00"] {
     background: #ededed;
+    line-height: 5.8;
 }
 
 tr[data-time="15:00:00"] {
     background: #ededed;
+    line-height: 5.8;
+}
+
+tr[data-time="16:00:00"] {
+    line-height: 5.8;
+}
+
+tr[data-time="17:00:00"] {
+    line-height: 5.8;
 }
 
 tr[data-time="18:00:00"] {
     background: #ededed;
+    line-height: 5.8;
 }
 
 tr[data-time="19:00:00"] {
     background: #ededed;
+    line-height: 5.8;
+}
+
+tr[data-time="20:00:00"] {
+    line-height: 5.8;
 }
 
 .fc-ltr .fc-time-grid .fc-event-container {

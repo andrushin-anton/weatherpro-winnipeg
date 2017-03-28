@@ -11,10 +11,13 @@ class AppointmentsController < ApplicationController
   # GET /appointments/1
   # GET /appointments/1.json
   def show
+    authorize! :show, @appointment
   end
 
   # GET /appointments/new
   def new
+    authorize! :new, Appointment
+
     schedule_time = Time.at(params[:unixtime].to_i).utc
     date = schedule_time.strftime("%Y-%m-%d")
     
@@ -52,12 +55,14 @@ class AppointmentsController < ApplicationController
 
   # GET /appointments/1/edit
   def edit
-    
+    authorize! :edit, @appointment    
   end
 
   # POST /appointments
   # POST /appointments.json
   def create
+    authorize! :create, Appointment
+
     @appointment = Appointment.new(appointment_params)
 
     respond_to do |format|
@@ -74,6 +79,8 @@ class AppointmentsController < ApplicationController
   # PATCH/PUT /appointments/1
   # PATCH/PUT /appointments/1.json
   def update
+    authorize! :update, @appointment
+
     respond_to do |format|
       if @appointment.update(appointment_params)
         format.html { redirect_to appointments_path, notice: 'Appointment was successfully updated.' }
@@ -88,6 +95,8 @@ class AppointmentsController < ApplicationController
   # DELETE /appointments/1
   # DELETE /appointments/1.json
   def destroy
+    authorize! :destroy, @appointment
+
     @appointment.destroy
     respond_to do |format|
       format.html { redirect_to appointments_url, notice: 'Appointment was successfully destroyed.' }

@@ -22,7 +22,7 @@ class User < ApplicationRecord
 
     def self.roles
         {admin: :admin, manager: :manager , seller: :seller, installer: :installer}
-    end
+    end    
 
      private
         def default_values
