@@ -16,6 +16,10 @@ class User < ApplicationRecord
         end
     end
 
+    def self.search_sellers(search)
+        self.where('first_name LIKE ? OR last_name LIKE ?', "%#{search}%", "%#{search}%").order('id DESC').ids
+    end
+    
     def full_name
         self.first_name + ' ' + self.last_name
     end

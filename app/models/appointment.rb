@@ -6,7 +6,7 @@ class Appointment < ApplicationRecord
     validates :new_customer_last_name, presence: true, :if => :is_new_customer?
     validates :new_customer_phone, presence: true, :if => :is_new_customer?
     validates :new_customer_email, allow_blank: true, length: { maximum: 70 }, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }, :if => :is_new_customer?
-
+    
     belongs_to :customer
 
     enum statuses: { assigned: :assigned, lead: :lead, reschedule: :reschedule, upSell: :upSell, referral: :referral, cancelled: :cancelled, sold: :sold, followUp: :followUp }
@@ -18,6 +18,33 @@ class Appointment < ApplicationRecord
             return true
         else
             return false
+        end
+    end
+
+    def self.search(user, search)
+        if search
+            if user.role == 'admin' || user.role == 'manager' 
+                
+                sellers_ids = User.search_sellers(search)
+                if sellers_ids.length > 0
+                    self.joins(:customer).where('address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ? OR seller_id IN(?)', "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{sellers_ids.join(",")}").order('id DESC').all
+                else
+                    self.joins(:customer).where('address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?', "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%").order('id DESC').all
+                end
+                
+            elsif user.role == 'seller'
+                self.where('(address LIKE ? OR city LIKE ?) AND seller_id = ?', "%#{search}%", "%#{search}%", user.id).order('id DESC').all
+            else
+                self.where('(address LIKE ? OR city LIKE ?) AND installer_id = ?', "%#{search}%", "%#{search}%", user.id).order('id DESC').all
+            end                
+        else
+            if user.role == 'admin' || user.role == 'manager' 
+                self.order('id DESC').all
+            elsif user.role == 'seller'
+                self.where('seller_id = ?', user.id).order('id DESC').all
+            else
+                self.where('installer_id = ?', user.id).order('id DESC').all
+            end
         end
     end
 

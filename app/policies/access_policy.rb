@@ -59,7 +59,7 @@ class AccessPolicy
     end
 
     role :seller, proc { |user| user.role == 'seller' } do
-      can [:update, :edit], Appointment do |appointment, user|
+      can [:index, :update, :edit], Appointment do |appointment, user|
         appointment.seller_id == user.id
       end
       
@@ -70,7 +70,7 @@ class AccessPolicy
     end
 
     role :installer, proc { |user| user.role == 'installer' } do
-      can [:update, :edit], Appointment do |appointment, user|
+      can [:index, :update, :edit], Appointment do |appointment, user|
         appointment.installer_id == user.id
       end
       
