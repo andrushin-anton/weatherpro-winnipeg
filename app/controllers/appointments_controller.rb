@@ -5,7 +5,15 @@ class AppointmentsController < ApplicationController
   # GET /appointments
   # GET /appointments.json
   def index
-    @appointments = Appointment.search(current_user, params[:search])
+    # this will need to get from params
+    today = Date.today # Today's date
+    # all current week days
+    @days_from_this_week = (today.at_beginning_of_week..today.at_end_of_week).map
+    # start and end dates for cursors
+    start_time = Time.parse(today.at_beginning_of_week.to_s)
+    end_time = Time.parse(today.at_end_of_week.to_s)
+    # get appointments
+    @appointments = Appointment.search(current_user, params[:search], start_time, end_time)
   end
 
   # GET /appointments/1

@@ -21,7 +21,7 @@ class Appointment < ApplicationRecord
         end
     end
 
-    def self.search(user, search)
+    def self.search(user, search, start_time, end_time)
         if search
             if user.role == 'admin' || user.role == 'manager' 
                 
@@ -39,11 +39,11 @@ class Appointment < ApplicationRecord
             end                
         else
             if user.role == 'admin' || user.role == 'manager' 
-                self.order('id DESC').all
+                self.where('schedule_time >= ? AND schedule_time < ?', start_time, end_time).order('id DESC').all
             elsif user.role == 'seller'
-                self.where('seller_id = ?', user.id).order('id DESC').all
+                self.where('schedule_time >= ? AND schedule_time < ? AND seller_id = ?', start_time, end_time, user.id).order('id DESC').all
             else
-                self.where('installer_id = ?', user.id).order('id DESC').all
+                self.where('schedule_time >= ? AND schedule_time < ? AND installer_id = ?', start_time, end_time, user.id).order('id DESC').all
             end
         end
     end

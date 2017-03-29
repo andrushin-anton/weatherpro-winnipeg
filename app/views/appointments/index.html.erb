@@ -28,7 +28,10 @@
         </div>
         <div class="x_content">
 
-          <div id="calendar" class="fc fc-unthemed fc-ltr"></div>
+
+        
+
+          
 
         </div>
       </div>
@@ -43,141 +46,6 @@
 
 
 
-
-
-<!-- calendar modal -->
-    <div id="CalenderModalNew" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 class="modal-title" id="myModalLabel2">Confirmation</h4>
-          </div>
-
-          <div class="modal-body">
-            <button type="button" class="btn btn-default antoclose" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary antosubmit">Add new Appointment</button>
-          </div>
-          
-          <div class="modal-footer">
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="CalenderModalEdit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 class="modal-title" id="myModalLabel2">Confirmation</h4>
-          </div>
-          <div class="modal-body">
-            <p>Customer: <span id="edit_customer"></spam></p>
-            <p>Address: <span id="edit_address"></spam></p>
-            <p>City: <span id="edit_city"></spam></p>
-            <p>Province: <span id="edit_province"></spam></p>
-            <button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary antosubmit2">View More</button>  
-          </div>
-          <div class="modal-footer">
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="fc_create" data-toggle="modal" data-target="#CalenderModalNew"></div>
-    <div id="fc_edit" data-toggle="modal" data-target="#CalenderModalEdit"></div>
-    <!-- /calendar modal -->
-
-
-    <script>
-      /* CALENDAR */
-		  
-		    function  init_calendar() {
-					
-				if( typeof ($.fn.fullCalendar) === 'undefined'){ return; }
-				console.log('init_calendar');
-					
-				var date = new Date(),
-					d = date.getDate(),
-					m = date.getMonth(),
-					y = date.getFullYear(),
-					started,
-					categoryClass;
-
-				var calendar = $('#calendar').fullCalendar({
-				  header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'month,agendaWeek,agendaDay,listMonth',
-				  },
-          defaultView: 'agendaWeek',
-          allDaySlot: false,
-          minTime: "09:00:00",
-          maxTime: "21:00:00",
-				  selectable: true,
-				  selectHelper: true,
-          slotDuration: "1:00:00",
-				  select: function(start, end, allDay) {
-					$('#fc_create').click();
-
-					started = start;
-					ended = end;
-
-					$(".antosubmit").on("click", function() {					
-						
-            window.location.href = '<%=new_appointment_path%>/'+started.unix();
-					
-					  calendar.fullCalendar('unselect');
-					  $('.antoclose').click();
-
-					  return false;
-					});
-				  },
-				  eventClick: function(calEvent, jsEvent, view) {
-					  $('#fc_edit').click();
-            var appointment = jQuery.parseJSON(calEvent.details);
-            $('#edit_customer').html(appointment.customer);
-            $('#edit_address').html(appointment.address);
-            $('#edit_city').html(appointment.city);
-            $('#edit_province').html(appointment.province);
-
-					$(".antosubmit2").on("click", function() {					  
-            window.location.href = calEvent.edit_url;
-					  calendar.fullCalendar('updateEvent', calEvent);
-					  $('.antoclose2').click();
-					});
-
-					calendar.fullCalendar('unselect');
-				  },
-				  editable: true,
-				  events: [
-          <% @appointments.each do |appointment| %>
-					{
-            edit_url: '<%= edit_appointment_path(appointment) %>',
-            title: '<%= appointment.address %>',
-					  start: new Date(<%= appointment.schedule_time.year%>, <%= appointment.schedule_time.month-1%>, <%= appointment.schedule_time.day%>, <%= appointment.schedule_time.hour%>, <%= appointment.schedule_time.min %>),
-            end: new Date(<%= appointment.end_time.year%>, <%= appointment.end_time.month-1%>, <%= appointment.end_time.day%>, <%= appointment.end_time.hour%>, <%= appointment.end_time.min %>),
-            allDay: false,
-            backgroundColor: '<%= appointment.color %>',
-            details: '<%= raw(appointment.details_for_quick_view.to_json) %>'
-				  }
-          <% unless appointment.eql?(@appointments.last) %>
-          ,
-          <% end %>
-          <% end %> 
-          ]
-				});
-				
-			};
-      $(document).ready(function() {
-        init_calendar();
-      });
-    </script>
-
-
+    
 <a href="#.">&nbsp;</a>
 
