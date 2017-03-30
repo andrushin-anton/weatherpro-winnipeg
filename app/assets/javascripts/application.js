@@ -16,5 +16,12 @@
 // require turbolinks
 //= require_tree .
 
-// document.addEventListener("turbolinks:load", function() {
-// });
+document.addEventListener("turbolinks:load", function() {
+
+
+});
+
+
+function redirect(url) {
+    window.location.href = url;
+}

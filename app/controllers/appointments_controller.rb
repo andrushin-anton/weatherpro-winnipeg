@@ -5,8 +5,15 @@ class AppointmentsController < ApplicationController
   # GET /appointments
   # GET /appointments.json
   def index
-    # this will need to get from params
-    today = Date.today # Today's date
+    if params[:date]
+      today = Date.parse(params[:date])
+    else
+      today = Date.today # Today's date
+    end
+
+    @prev_url = appointments_path + '/date/' + (today - 1.week).to_s
+    @next_url = appointments_path + '/date/' + (today + 1.week).to_s
+    
     # all current week days
     @days_from_this_week = (today.at_beginning_of_week..today.at_end_of_week).map
     # start and end dates for cursors

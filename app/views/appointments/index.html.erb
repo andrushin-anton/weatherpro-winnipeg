@@ -1,4 +1,4 @@
-<div class="">
+<div class="x_panel">
   <div class="page-title">
     <div class="title_left">
       <h3>Appointments</h3>
@@ -29,7 +29,87 @@
         <div class="x_content">
 
 
-        
+          <div id="calendar" class="fc fc-unthemed fc-ltr">
+          <div class="fc-toolbar fc-header-toolbar">
+            <div class="fc-left">
+              <div class="fc-button-group">
+                <button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left" onclick="redirect('<%= @prev_url %>')">
+                <span class="fc-icon fc-icon-left-single-arrow"></span>
+                </button>
+                <button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right" onclick="redirect('<%= @next_url %>')">
+                <span class="fc-icon fc-icon-right-single-arrow"></span>
+                </button>
+              </div>
+              <button type="button" class="fc-today-button fc-button fc-state-default fc-corner-left fc-corner-right" onclick="redirect('<%= appointments_path%>')">today</button>
+            </div>
+            <div class="fc-right">
+            <div class="fc-button-group">
+            </div>
+          </div>
+          
+          <div class="fc-center">
+            <h2><%= @days_from_this_week.first.to_formatted_s(:short) %> – <%= @days_from_this_week.to_a.last.to_formatted_s(:short) %>, 2017</h2>
+          </div>
+          
+          <div class="fc-clear"></div>
+          </div>
+          
+          
+          <div class="fc-view-container">
+            <div class="fc-view fc-agendaWeek-view fc-agenda-view">
+
+              <table class="appointments-table">
+                
+                <tr>
+                  <td>Time</td>
+                  <% @days_from_this_week.each do |day|%>
+                  <td data-date="<%= day.to_s %>"><%= day.to_formatted_s(:short) %></td>
+                  <% end %>
+                </tr>
+                
+                <tr>
+                  <td>FollowUp</td>
+                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: true %>
+                </tr>
+
+                <tr>
+                  <td>9-10</td>
+                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: false, hour: 9 %>
+                </tr>
+
+                <tr>
+                  <td>10-12</td>
+                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: false, hour: 10  %>
+                </tr>
+
+                <tr>
+                  <td>12-14</td>
+                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: false, hour: 12 %>
+                </tr>
+
+                <tr>
+                  <td>14-16</td>
+                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: false, hour: 14 %>
+                </tr>
+
+                <tr>
+                  <td>16-18</td>
+                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: false, hour: 16 %>
+                </tr>
+
+                <tr>
+                  <td>18-20</td>
+                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: false, hour: 18 %>
+                </tr>
+
+                <tr>
+                  <td>20-21</td>
+                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: false, hour: 20 %>
+                </tr>
+
+              </table>
+            </div>
+          </div>
 
           
 
