@@ -2,6 +2,7 @@
 <td data-date="<%= day.to_s %>" <% if defined? hour %>class="appointments-table-content"<% end %>>
     <% if defined? hour %>
     <% available = 0 %>
+    <% if current_user.role == 'admin' || current_user.role == 'manager' %>
     <% date_time = day.strftime('%Y-%m-%d ' + hour.to_s + ':00:00') %>
     <% sellerschedule.each do |schedule| %>
         <% if schedule.schedule_time ==  date_time %>
@@ -16,6 +17,7 @@
         <% end %>
     <% end %>
     <p><%= available %> Booking Available</p>
+    <% end %>
     <% end%>
     <% appointments.each do |app| %>
         <% if followUp %>
