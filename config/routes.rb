@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
   
+  get 'installerschedule/:id', to: 'installer_schedule#show', as: 'installerschedule'
+  get 'installerschedule/:id/date/:date', to: 'installer_schedule#show', as: 'installerscheduledate'
+  post 'installerscheduleupdate', to: 'installer_schedule#update', as: 'installerscheduleupdate'
+
   get 'sellerschedule/:id', to: 'seller_schedule#show', as: 'sellerschedule'
   get 'sellerschedule/:id/date/:date', to: 'seller_schedule#show', as: 'sellerscheduledate'
   post 'sellerscheduleupdate', to: 'seller_schedule#update', as: 'sellerscheduleupdate'

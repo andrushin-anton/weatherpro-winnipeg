@@ -1,0 +1,33 @@
+<% days_from_this_week.each do |day|%>
+<td data-date="<%= day.to_s %>" <% if defined? hour %>class="appointments-table-content"<% end %>>
+    <% appointments.each do |app| %>
+        <% if followUp %>
+            <% if app.status.to_sym == Appointment.statuses[:followUp] && app.schedule_time.to_date.to_formatted_s(:db) == day.to_formatted_s(:db) %>
+            <a href="<%= edit_appointment_path(app) %>">
+            <div class="event" style="background:<%= app.color%>;">
+                <%= app.customer.first_name %>
+                <br>
+                <%= app.address %>
+            </div>
+            </a>
+            <% end %>
+        <% else %>
+            <% if app.status.to_sym != Appointment.statuses[:followUp] && app.schedule_time.to_date.to_formatted_s(:db) == day.to_formatted_s(:db)  && app.schedule_time.strftime("%H").to_i == hour %>
+            <a href="<%= edit_appointment_path(app) %>">
+            <div class="event" style="background:<%= app.color%>;">
+                <%= app.customer.first_name %>
+                <br>
+                <%= app.address %>
+            </div>
+            </a>        
+            <% end %>
+        <% end %>
+    <% end %>
+    <% if defined? hour %>
+
+        <% date_time = day.strftime('%Y-%m-%d ' + hour.to_s + ':00:00') %>
+        <input type="checkbox" name="schedule_time[]" value="<%= date_time %>" <% if @schedule.include? date_time %>checked<% end %>>
+    
+    <% end %>
+</td>
+<% end %>

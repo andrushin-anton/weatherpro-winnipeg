@@ -39,7 +39,7 @@
                 <select class="form-control" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
                   <option value="<%= appointments_path %>">Installers...</option>
                   <% @installers.each do |user| %>
-                  <option value="/xxxx"><%= user.full_name %></option>
+                  <option value="<%= installerschedule_path(user) %>"><%= user.full_name %></option>
                   <% end %>
                 </select>
               </div>
