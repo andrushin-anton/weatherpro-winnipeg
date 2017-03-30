@@ -24,7 +24,7 @@
         <% end %>
     <% end %>
     <% if defined? hour %>
-        <% date_time = day.strftime('%Y-%m-%D ' + hour.to_s + ':00:00') %>
+        <% date_time = day.strftime('%Y-%m-%d ' + hour.to_s + ':00:00') %>
         <a href="<%= new_appointment_path %>/<%= DateTime.parse(date_time).to_i %>">New appointment</a>
     <% end %>
 </td>
