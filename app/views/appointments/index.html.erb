@@ -60,7 +60,7 @@
 
               <table class="appointments-table">
                 
-                <tr>
+                <tr class="appointments-table-header">
                   <td>Time</td>
                   <% @days_from_this_week.each do |day|%>
                   <td data-date="<%= day.to_s %>"><%= day.to_formatted_s(:short) %></td>
@@ -73,37 +73,37 @@
                 </tr>
 
                 <tr>
-                  <td>9-10</td>
+                  <td class="appointments-table-time">9-10</td>
                   <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: false, hour: 9 %>
                 </tr>
 
                 <tr>
-                  <td>10-12</td>
+                  <td class="appointments-table-time">10-12</td>
                   <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: false, hour: 10  %>
                 </tr>
 
                 <tr>
-                  <td>12-14</td>
+                  <td class="appointments-table-time">12-14</td>
                   <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: false, hour: 12 %>
                 </tr>
 
                 <tr>
-                  <td>14-16</td>
+                  <td class="appointments-table-time">14-16</td>
                   <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: false, hour: 14 %>
                 </tr>
 
                 <tr>
-                  <td>16-18</td>
+                  <td class="appointments-table-time">16-18</td>
                   <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: false, hour: 16 %>
                 </tr>
 
                 <tr>
-                  <td>18-20</td>
+                  <td class="appointments-table-time">18-20</td>
                   <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: false, hour: 18 %>
                 </tr>
 
                 <tr>
-                  <td>20-21</td>
+                  <td class="appointments-table-time">20-21</td>
                   <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, followUp: false, hour: 20 %>
                 </tr>
 
