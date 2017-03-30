@@ -21,6 +21,11 @@ class AppointmentsController < ApplicationController
     end_time = Time.parse(today.at_end_of_week.to_s)
     # get appointments
     @appointments = Appointment.search(current_user, params[:search], start_time, end_time)
+    # get sellers and installers for admins
+    if current_user.role == 'admin'
+      @sellers = User.where(role: 'seller').all
+      @installers = User.where(role: 'installer').all
+    end
   end
 
   # GET /appointments/1

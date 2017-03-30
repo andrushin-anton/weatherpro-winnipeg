@@ -1,0 +1,2 @@
+class InstallerSchedule < ApplicationRecord
+end

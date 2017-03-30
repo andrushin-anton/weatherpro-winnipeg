@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
   
+  get 'sellerschedule/:id', to: 'seller_schedule#show', as: 'sellerschedule'
+  get 'sellerschedule/:id/date/:date', to: 'seller_schedule#show', as: 'sellerscheduledate'
+  post 'sellerscheduleupdate', to: 'seller_schedule#update', as: 'sellerscheduleupdate'
+
   resources :appointments
   resources :administrators
   resources :managers

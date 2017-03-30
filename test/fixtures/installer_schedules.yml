@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  schedule_time: 2017-03-30 16:02:54
+  installer_id: 1
+
+two:
+  schedule_time: 2017-03-30 16:02:54
+  installer_id: 1

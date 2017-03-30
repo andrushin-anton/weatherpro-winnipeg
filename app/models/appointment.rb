@@ -48,6 +48,14 @@ class Appointment < ApplicationRecord
         end
     end
 
+    def self.search_by_seller(user, seller_id, search, start_time, end_time)
+        if search    
+            self.joins(:customer).where('(address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?) AND seller_id = ?', "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{seller_id}").order('id DESC').all           
+        else
+            self.where('schedule_time >= ? AND schedule_time < ? AND seller_id = ?', start_time, end_time, seller_id).order('id DESC').all
+        end
+    end
+
     def color
         case self.status.to_sym
         when :lead

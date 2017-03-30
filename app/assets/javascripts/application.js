@@ -13,14 +13,14 @@
 //= require jquery
 //= require jquery_ujs
 //= require moment
-// require turbolinks
+//= require turbolinks
 //= require_tree .
 
-document.addEventListener("turbolinks:load", function() {
-
-
+$(document).on('turbolinks:load', function() {
+    $(".select-all-checkboxes").change(function() {
+        $("input:checkbox").prop('checked', $(this).prop("checked"));
+    });
 });
-
 
 function redirect(url) {
     window.location.href = url;

@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  schedule_time: 2017-03-30 12:28:01
+  seller_id: 1
+
+two:
+  schedule_time: 2017-03-30 12:28:01
+  seller_id: 1
