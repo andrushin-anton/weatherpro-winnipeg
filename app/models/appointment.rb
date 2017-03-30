@@ -9,7 +9,7 @@ class Appointment < ApplicationRecord
     
     belongs_to :customer
 
-    enum statuses: { assigned: :assigned, lead: :lead, reschedule: :reschedule, upSell: :upSell, referral: :referral, cancelled: :cancelled, sold: :sold, followUp: :followUp }
+    enum statuses: { assigned: :Assigned, lead: :Lead, reschedule: :Reschedule, upSell: :UpSell, referral: :Referral, cancelled: :Cancelled, sold: :Sold, followUp: :FollowUp }
 
     attr_accessor :new_customer_first_name, :new_customer_last_name, :new_customer_phone, :new_customer_email
 
@@ -66,21 +66,21 @@ class Appointment < ApplicationRecord
 
     def color
         case self.status.to_sym
-        when :lead
+        when :Lead
             return '#583030'
-        when :assigned
+        when :Assigned
             return '#FF902F'
-        when :reschedule
+        when :Reschedule
             return '#3A29D2'
-        when :upSell
+        when :UpSell
             return '#d28f3e'
-        when :referral
+        when :Referral
             return '#d28f3e'
-        when :cancelled
+        when :Cancelled
             return '#EC2D26'
-        when :sold
+        when :Sold
             return '#4DB02F'
-        when :followUp
+        when :FollowUp
             return '#B326C9'
         else
             return '#FFF'

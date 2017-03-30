@@ -14,7 +14,7 @@
       <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Status</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.select :status, options_for_select(Appointment.statuses, appointment.status.to_sym), {}, { class: 'form-control' } %>
+            <%= f.select :status, options_for_select(Appointment.statuses.values, appointment.status.to_sym), {}, { class: 'form-control' } %>
           </div>
       </div>
 
@@ -35,12 +35,14 @@
           </div>
       </div>
 
+      <% if current_user.role == 'admin' %>
       <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Seller</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
             <%= f.select :seller_id, options_for_select(@sellers.map{ |c| [c.full_name, c.id] }, appointment.seller_id), {:include_blank => 'None Specified'}, { class: 'form-control' } %>
           </div>
       </div>
+      <% end %>
 
       <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Installer</label>

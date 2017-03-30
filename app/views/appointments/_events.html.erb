@@ -1,6 +1,22 @@
 <% days_from_this_week.each do |day|%>
 <td data-date="<%= day.to_s %>" <% if defined? hour %>class="appointments-table-content"<% end %>>
-    <% if defined? hour %><p>1 Booking Available</p><% end%>
+    <% if defined? hour %>
+    <% available = 0 %>
+    <% date_time = day.strftime('%Y-%m-%d ' + hour.to_s + ':00:00') %>
+    <% sellerschedule.each do |schedule| %>
+        <% if schedule.schedule_time ==  date_time %>
+        <% available = available + 1 %>
+        <% end %>
+    <% end %>
+    <% appointments.each do |app| %>
+        <% if app.status.to_sym != Appointment.statuses[:followUp] && app.status.to_sym != Appointment.statuses[:Cancelled] && app.status.to_sym != Appointment.statuses[:Sold] %>
+        <% if app.schedule_time.to_date.to_formatted_s(:db) == day.to_formatted_s(:db)  && app.schedule_time.strftime("%H").to_i == hour %>
+            <% available = available - 1 if available > 0 %>
+        <% end %>
+        <% end %>
+    <% end %>
+    <p><%= available %> Booking Available</p>
+    <% end%>
     <% appointments.each do |app| %>
         <% if followUp %>
             <% if app.status.to_sym == Appointment.statuses[:followUp] && app.schedule_time.to_date.to_formatted_s(:db) == day.to_formatted_s(:db) %>
@@ -25,9 +41,11 @@
         <% end %>
     <% end %>
     <% if defined? hour %>
+    <% if available > 0 %>
     <% if can? :new, Appointment %>
         <% date_time = day.strftime('%Y-%m-%d ' + hour.to_s + ':00:00') %>
         <a href="<%= new_appointment_path %>/<%= DateTime.parse(date_time).to_i %>"><i class="fa fa-tags"></i> Add</a>
+    <% end %>
     <% end %>
     <% end %>
 </td>

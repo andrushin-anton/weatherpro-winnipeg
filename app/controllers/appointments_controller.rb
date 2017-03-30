@@ -26,6 +26,11 @@ class AppointmentsController < ApplicationController
       @sellers = User.where(role: 'seller').all
       @installers = User.where(role: 'installer').all
     end
+    # get bookins available for admins and managers
+    if current_user.role == 'admin' || current_user.role == 'manager'
+      @sellerschedule = SellerSchedule.search_by_date_range(start_time, end_time)
+      @installerschedule = InstallerSchedule.search_by_date_range(start_time, end_time)
+    end
   end
 
   # GET /appointments/1
@@ -71,11 +76,17 @@ class AppointmentsController < ApplicationController
 
     @appointment.schedule_time = schedule_time
     @appointment.end_time = end_time
+
+    @sellers = User.where(:status => 'ACTIVE', :role => 'seller', :id => SellerSchedule.seller_ids_by_date_range(@appointment.schedule_time, @appointment.end_time))
+    @installers = User.where(:status => 'ACTIVE', :role => 'installer', :id => InstallerSchedule.installer_ids_by_date_range(@appointment.schedule_time, @appointment.end_time))
   end
 
   # GET /appointments/1/edit
   def edit
     authorize! :edit, @appointment    
+
+    @sellers = User.where(:status => 'ACTIVE', :role => 'seller', :id => SellerSchedule.seller_ids_by_date_range(@appointment.schedule_time, @appointment.end_time))
+    @installers = User.where(:status => 'ACTIVE', :role => 'installer', :id => InstallerSchedule.installer_ids_by_date_range(@appointment.schedule_time, @appointment.end_time))
   end
 
   # POST /appointments
@@ -132,8 +143,6 @@ class AppointmentsController < ApplicationController
 
     def set_data
       @customers = Customer.where(:status => 'ACTIVE').all()
-      @sellers = User.where(:status => 'ACTIVE', :role => 'seller').all()
-      @installers = User.where(:status => 'ACTIVE', :role => 'installer').all()
     end
     
 
