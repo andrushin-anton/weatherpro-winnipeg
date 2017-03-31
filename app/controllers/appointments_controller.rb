@@ -16,16 +16,20 @@ class AppointmentsController < ApplicationController
     
     # all current week days
     @days_from_this_week = (today.at_beginning_of_week..today.at_end_of_week).map
+    
     # start and end dates for cursors
     start_time = Time.parse(today.at_beginning_of_week.to_s)
     end_time = Time.parse(today.at_end_of_week.to_s)
+    
     # get appointments
     @appointments = Appointment.search(current_user, params[:search], start_time, end_time)
+    # get followups
+    @followups = Appointment.search_followups(current_user, params[:search], start_time, end_time)
+    
     # get sellers and installers for admins
-    if current_user.role == 'admin'
-      @sellers = User.where(role: 'seller').all
-      @installers = User.where(role: 'installer').all
-    end
+    @sellers = User.where(role: 'seller').all
+    @installers = User.where(role: 'installer').all
+
     # get bookins available for admins and managers
     if current_user.role == 'admin' || current_user.role == 'manager'
       @sellerschedule = SellerSchedule.search_by_date_range(start_time, end_time)
@@ -148,6 +152,6 @@ class AppointmentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def appointment_params
-      params.require(:appointment).permit(:new_customer_first_name, :new_customer_last_name, :new_customer_phone, :new_customer_email, :status, :is_new_customer, :schedule_time, :end_time, :comments, :seller_id, :customer_id, :address, :city, :province, :postal_code, :windows_num, :doors_num, :how_soon, :quotes_num, :hear_about_us, :homeoweners_at_home, :supply_install, :financing, :installer_id)
+      params.require(:appointment).permit(:followup_time, :new_customer_first_name, :new_customer_last_name, :new_customer_phone, :new_customer_email, :status, :is_new_customer, :schedule_time, :end_time, :comments, :seller_id, :customer_id, :address, :city, :province, :postal_code, :windows_num, :doors_num, :how_soon, :quotes_num, :hear_about_us, :homeoweners_at_home, :supply_install, :financing, :installer_id)
     end
 end

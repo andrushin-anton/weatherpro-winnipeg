@@ -40,6 +40,8 @@ class AccessPolicy
     role :admin, proc { |user| user.role == 'admin' } do
       can [:index, :create, :new, :show, :edit, :update, :destroy], Appointment
       can [:index, :create, :new, :show, :edit, :update, :destroy], Customer
+      can [:show, :update], SellerSchedule
+      can [:show, :update], InstallerSchedule
       can [
         :index, :create, :new, :show, :edit, :update, :destroy, :update_password, 
         :password, :activate, :administrators, :administrators_new, :administrators_create,
@@ -59,7 +61,7 @@ class AccessPolicy
     end
 
     role :seller, proc { |user| user.role == 'seller' } do
-      can [:index, :update, :edit], Appointment do |appointment, user|
+      can [:index, :update, :show], Appointment do |appointment, user|
         appointment.seller_id == user.id
       end
       
@@ -70,7 +72,7 @@ class AccessPolicy
     end
 
     role :installer, proc { |user| user.role == 'installer' } do
-      can [:index, :update, :edit], Appointment do |appointment, user|
+      can [:index, :update, :show], Appointment do |appointment, user|
         appointment.installer_id == user.id
       end
       

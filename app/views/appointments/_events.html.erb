@@ -10,7 +10,7 @@
         <% end %>
     <% end %>
     <% appointments.each do |app| %>
-        <% if app.status.to_sym != Appointment.statuses[:followUp] && app.status.to_sym != Appointment.statuses[:Cancelled] && app.status.to_sym != Appointment.statuses[:Sold] %>
+        <% if app.status.to_sym != Appointment.statuses[:Cancelled] && app.status.to_sym != Appointment.statuses[:Sold] %>
         <% if app.schedule_time.to_date.to_formatted_s(:db) == day.to_formatted_s(:db)  && app.schedule_time.strftime("%H").to_i == hour %>
             <% available = available - 1 if available > 0 %>
         <% end %>
@@ -19,24 +19,43 @@
     <p><%= available %> Booking Available</p>
     <% end %>
     <% end%>
-    <% appointments.each do |app| %>
-        <% if followUp %>
-            <% if app.status.to_sym == Appointment.statuses[:followUp] && app.schedule_time.to_date.to_formatted_s(:db) == day.to_formatted_s(:db) %>
-            <a href="<%= edit_appointment_path(app) %>">
+
+    <% if defined? followups %>
+        <% followups.each do |app| %>    
+            <% if app.followup_time.to_date.to_formatted_s(:db) == day.to_formatted_s(:db) %>
+            <a href="<% if can? :edit, Appointment %><%= edit_appointment_path(app) %><% else %><%= appointment_path(app) %><% end %>">
             <div class="event" style="background:<%= app.color%>;">
                 <%= app.customer.first_name %>
                 <br>
-                <%= app.address %>
+                <%= app.city %>
+                <% if sellers.length > 0 %>
+                <% sellers.each do |selesman| %>
+                <% if selesman.id == app.seller_id %>
+                <br>
+                <%= selesman.first_name %>
+                <% end %>
+                <% end %>
+                <% end %>
             </div>
             </a>
             <% end %>
-        <% else %>
-            <% if app.status.to_sym != Appointment.statuses[:followUp] && app.schedule_time.to_date.to_formatted_s(:db) == day.to_formatted_s(:db)  && app.schedule_time.strftime("%H").to_i == hour %>
-            <a href="<%= edit_appointment_path(app) %>">
+        <% end %>
+    <% else %>
+        <% appointments.each do |app| %>
+            <% if app.schedule_time.to_date.to_formatted_s(:db) == day.to_formatted_s(:db)  && app.schedule_time.strftime("%H").to_i == hour %>
+            <a href="<% if can? :edit, Appointment %><%= edit_appointment_path(app) %><% else %><%= appointment_path(app) %><% end %>">
             <div class="event" style="background:<%= app.color%>;">
                 <%= app.customer.first_name %>
                 <br>
-                <%= app.address %>
+                <%= app.city %>
+                <% if sellers.length > 0 %>
+                <% sellers.each do |selesman| %>
+                <% if selesman.id == app.seller_id %>
+                <br>
+                <%= selesman.first_name %>
+                <% end %>
+                <% end %>
+                <% end %>
             </div>
             </a>        
             <% end %>

@@ -21,48 +21,156 @@ class Appointment < ApplicationRecord
         end
     end
 
+    #Appointments
     def self.search(user, search, start_time, end_time)
+        if search
+            #Admins and Managers
+            if user.role == 'admin' || user.role == 'manager' 
+                #search for sellers and get their ids
+                sellers_ids = User.search_sellers(search)
+                if sellers_ids.length > 0
+                    self.joins(:customer).where(
+                        'appointments.status != ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ? OR seller_id IN(?))', 
+                        "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{sellers_ids.join(",")}"
+                    ).order('id DESC').all
+                else
+                    self.joins(:customer).where(
+                        'appointments.status != ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?)', 
+                        "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%"
+                    ).order('id DESC').all
+                end
+            #Sellers only
+            elsif user.role == 'seller'
+                self.where(
+                    'status != ? AND (address LIKE ? OR city LIKE ?) AND seller_id = ?', 
+                    "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", user.id
+                ).order('id DESC').all
+            #Installers
+            else
+                self.where(
+                    'status != ? AND (address LIKE ? OR city LIKE ?) AND installer_id = ?', 
+                    "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", user.id
+                    ).order('id DESC').all
+            end                
+
+        else
+            if user.role == 'admin' || user.role == 'manager' 
+                self.where(
+                    'status != ? AND schedule_time >= ? AND schedule_time < ?',
+                    "#{self.statuses[:followUp]}", start_time, end_time
+                ).order('id DESC').all
+            elsif user.role == 'seller'
+                self.where(
+                    'status != ? AND schedule_time >= ? AND schedule_time < ? AND seller_id = ?', 
+                    "#{self.statuses[:followUp]}", start_time, end_time, user.id
+                ).order('id DESC').all
+            else
+                self.where(
+                    'status != ? AND schedule_time >= ? AND schedule_time < ? AND installer_id = ?', 
+                    "#{self.statuses[:followUp]}", start_time, end_time, user.id
+                ).order('id DESC').all
+            end
+        end
+    end
+
+    def self.search_followups(user, search, start_time, end_time)
         if search
             if user.role == 'admin' || user.role == 'manager' 
                 
                 sellers_ids = User.search_sellers(search)
                 if sellers_ids.length > 0
-                    self.joins(:customer).where('address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ? OR seller_id IN(?)', "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{sellers_ids.join(",")}").order('id DESC').all
+                    self.joins(:customer).where(
+                        'appointments.status = ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ? OR seller_id IN(?))', 
+                        "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{sellers_ids.join(",")}"
+                    ).order('id DESC').all
                 else
-                    self.joins(:customer).where('address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?', "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%").order('id DESC').all
+                    self.joins(:customer).where(
+                        'appointments.status = ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?)', 
+                        "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%"
+                    ).order('id DESC').all
                 end
                 
             elsif user.role == 'seller'
-                self.where('(address LIKE ? OR city LIKE ?) AND seller_id = ?', "%#{search}%", "%#{search}%", user.id).order('id DESC').all
+                self.where(
+                    'status = ? AND (address LIKE ? OR city LIKE ?) AND seller_id = ?', 
+                    "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", user.id
+                ).order('id DESC').all
             else
-                self.where('(address LIKE ? OR city LIKE ?) AND installer_id = ?', "%#{search}%", "%#{search}%", user.id).order('id DESC').all
+                self.where(
+                    'status = ? AND (address LIKE ? OR city LIKE ?) AND installer_id = ?', 
+                    "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", user.id
+                ).order('id DESC').all
             end                
         else
             if user.role == 'admin' || user.role == 'manager' 
-                self.where('schedule_time >= ? AND schedule_time < ?', start_time, end_time).order('id DESC').all
+                self.where('status = ? AND followup_time >= ? AND followup_time < ?', "#{self.statuses[:followUp]}", start_time, end_time).order('id DESC').all
             elsif user.role == 'seller'
-                self.where('schedule_time >= ? AND schedule_time < ? AND seller_id = ?', start_time, end_time, user.id).order('id DESC').all
+                self.where('status = ? AND followup_time >= ? AND followup_time < ? AND seller_id = ?', "#{self.statuses[:followUp]}", start_time, end_time, user.id).order('id DESC').all
             else
-                self.where('schedule_time >= ? AND schedule_time < ? AND installer_id = ?', start_time, end_time, user.id).order('id DESC').all
+                self.where('status = ? AND followup_time >= ? AND followup_time < ? AND installer_id = ?', "#{self.statuses[:followUp]}", start_time, end_time, user.id).order('id DESC').all
             end
         end
     end
 
+    #Sellers
     def self.search_by_seller(user, seller_id, search, start_time, end_time)
         if search    
-            self.joins(:customer).where('(address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?) AND seller_id = ?', "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{seller_id}").order('id DESC').all           
+            self.joins(:customer).where(
+                'appointments.status != ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?) AND seller_id = ?',
+                "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{seller_id}"
+            ).order('id DESC').all           
         else
-            self.where('schedule_time >= ? AND schedule_time < ? AND seller_id = ?', start_time, end_time, seller_id).order('id DESC').all
+            self.where(
+                'status != ? AND schedule_time >= ? AND schedule_time < ? AND seller_id = ?',
+                "#{self.statuses[:followUp]}", start_time, end_time, seller_id
+            ).order('id DESC').all
         end
     end
 
-    def self.search_by_installer(user, installer_id, search, start_time, end_time)
+    def self.search_followups_by_seller(user, seller_id, search, start_time, end_time)
         if search    
-            self.joins(:customer).where('(address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?) AND installer_id = ?', "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{installer_id}").order('id DESC').all           
+            self.joins(:customer).where(
+                'appointments.status = ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?) AND seller_id = ?',
+                "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{seller_id}"
+            ).order('id DESC').all           
         else
-            self.where('schedule_time >= ? AND schedule_time < ? AND installer_id = ?', start_time, end_time, installer_id).order('id DESC').all
+            self.where(
+                'status = ? AND followup_time >= ? AND followup_time < ? AND seller_id = ?',
+                "#{self.statuses[:followUp]}", start_time, end_time, seller_id
+            ).order('id DESC').all
         end
     end
+
+    #Installers
+    def self.search_by_installer(user, installer_id, search, start_time, end_time)
+        if search    
+            self.joins(:customer).where(
+                'appointments.status != ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?) AND installer_id = ?',
+                "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{installer_id}"
+            ).order('id DESC').all           
+        else
+            self.where(
+                'status != ? AND schedule_time >= ? AND schedule_time < ? AND installer_id = ?',
+                "#{self.statuses[:followUp]}", start_time, end_time, installer_id
+            ).order('id DESC').all
+        end
+    end
+
+    def self.search_followups_by_installer(user, installer_id, search, start_time, end_time)
+        if search    
+            self.joins(:customer).where(
+                'appointments.status = ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?) AND installer_id = ?',
+                "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{installer_id}"
+            ).order('id DESC').all           
+        else
+            self.where(
+                'status = ? AND followup_time >= ? AND followup_time < ? AND installer_id = ?',
+                "#{self.statuses[:followUp]}", start_time, end_time, installer_id
+            ).order('id DESC').all
+        end
+    end
+
+    
 
     def color
         case self.status.to_sym

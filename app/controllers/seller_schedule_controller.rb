@@ -1,6 +1,8 @@
 class SellerScheduleController < ApplicationController
 
   def show
+    authorize! :show, SellerSchedule
+
     @seller = User.find(params[:id])
 
     if params[:date]
@@ -21,11 +23,15 @@ class SellerScheduleController < ApplicationController
     @schedule = SellerSchedule.search(@seller.id, start_time, end_time)
     # get appointments
     @appointments = Appointment.search_by_seller(current_user, @seller.id, params[:search], start_time, end_time)
+    @followups = Appointment.search_followups_by_seller(current_user, @seller.id, params[:search], start_time, end_time)
+
     @sellers = User.where(role: 'seller').all
     @installers = User.where(role: 'installer').all
   end
 
   def update
+    authorize! :update, SellerSchedule
+
     @seller = User.find(params[:seller_id])
 
     respond_to do |format|

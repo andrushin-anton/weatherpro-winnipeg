@@ -68,7 +68,7 @@
 
             <!-- /menu footer buttons -->
             <div class="sidebar-footer hidden-small">
-              <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
+              <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings" href="<%= password_path(current_user) %>">
                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
               </a>
               <a data-toggle="tooltip" data-placement="top" title="" data-original-title="FullScreen">
@@ -119,6 +119,7 @@
           <strong>Message:</strong> <%= msg%>
         </div>
         <% end %>
+
         <div class="x_panel">
           <%= yield %>
         </div>
