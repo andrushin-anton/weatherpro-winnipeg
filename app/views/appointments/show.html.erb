@@ -84,13 +84,28 @@
           <strong>Comments:</strong>
           <%= @appointment.comments %>
         </p>
+        <p>
+          <strong>Attachments:</strong><br>
+          <% @appointment.attachments.each do |file| %>
+          <a target="_blank" href="<%= file.file_url %>"><%= file.file_name %></a><br>
+          <% end %>
+        </p>
+        <div id="uploads_container"></div>
+        <script id="template-upload" type="text/x-tmpl">
+          <div id="upload_{%=o.unique_id%}" class="upload">
+            <h5>{%=o.name%}</h5>
+            <div class="progress progress-striped active">
+              <div class="bar" style="width: 0%"></div>
+            </div>
+          </div>
+        </script>
   </div>
 
   </div>
 
 
 
-<div class="col-md-6 col-xs-12">
+              <div class="col-md-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
                     <h2>Action Form</h2>
@@ -112,6 +127,7 @@
                         </div>
                       </div>
 
+                      <!-- FollowUp -->
                       <div id="followup-seller-action-form" style="display:none;" class="seller-action-form">
                         <%= form_for @appointment, :html => {:class => 'form-horizontal form-label-left input_mask'} do |f| %>
                     
@@ -121,7 +137,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Choose date</label>
                             <div class="col-md-9 xdisplay_inputx form-group has-feedback">
                               <%= f.hidden_field :followup_time, value: @appointment.schedule_time.to_formatted_s(:db), id: 'followup_date' %>
-                              <input type="text" class="datepicker form-control has-feedback-left datepicker" value="<%= Date.today.strftime("%m/%d/%Y") %>" require="true" />
+                              <input type="text" class="datepicker form-control has-feedback-left datepicker" value="<%= Date.today.strftime("%m/%d/%Y") %>" required />
                               <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                             </div>
                           </div>
@@ -129,14 +145,14 @@
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">FollowUp Question 1</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control" placeholder="Default Input">
+                              <input type="text" class="form-control" placeholder="Default Input" required>
                             </div>
                           </div>
 
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">FollowUp Question 2</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control" placeholder="Default Input">
+                              <input type="text" class="form-control" placeholder="Default Input" required>
                             </div>
                           </div>
                           
@@ -149,21 +165,38 @@
                           </div>
                         <% end %>           
                       </div>
+                      <!-- End FollowUp -->
 
+                      <!-- Sold -->
                       <div id="sold-seller-action-form" style="display:none;" class="seller-action-form">
-                        <form class="form-horizontal form-label-left input_mask">
-                          <input type="hidden" name="status" value="<%= Appointment.statuses[:sold] %>">
+                        <%= s3_uploader_form callback_url: new_url,
+                                  id: "s3_uploader",
+                                  callback_param: "file_url",
+                                  expiration: 2.hours.from_now.utc.iso8601,
+                                  callback_method: "POST",
+                                  max_file_size: 2.megabytes,
+                                  data: {:key => :val} do %>
+                                  
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Please attach required files</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                            <%= file_field_tag :file, multiple: false, class: 'form-control' %>
+                            </div>
+                          </div>
+                        <% end %>
+                        <%= form_for @appointment, :html => {:class => 'form-horizontal form-label-left input_mask'} do |f| %>
+                          <%= f.hidden_field :status, value: Appointment.statuses[:sold] %>
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Sold Question 1</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control" placeholder="Default Input">
+                              <input type="text" class="form-control" placeholder="Default Input" required>
                             </div>
                           </div>
 
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Sold Question 2</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control" placeholder="Default Input">
+                              <input type="text" class="form-control" placeholder="Default Input" required>
                             </div>
                           </div>
                           
@@ -171,26 +204,28 @@
                           <div class="form-group">
                             <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                               <button class="btn btn-primary" type="reset">Reset</button>
-                              <button type="submit" class="btn btn-success">Save as Sold</button>
+                              <%= f.submit 'Save as Sold', :class => 'btn btn-success', id: 'submit-sold', disabled: 'true' %>
                             </div>
                           </div>
-                        </form>                  
+                        <% end %>             
                       </div>
+                      <!-- End Sold -->
 
+                      <!-- Canceled -->
                       <div id="canceled-seller-action-form" style="display:none;" class="seller-action-form">
-                        <form class="form-horizontal form-label-left input_mask">
-                          <input type="hidden" name="status" value="<%= Appointment.statuses[:cancelled] %>">
+                        <%= form_for @appointment, :html => {:class => 'form-horizontal form-label-left input_mask'} do |f| %>
+                          <%= f.hidden_field :status, value: Appointment.statuses[:cancelled] %>
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Cancelled Question 1</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control" placeholder="Default Input">
+                              <input type="text" class="form-control" placeholder="Default Input" required>
                             </div>
                           </div>
 
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Cancelled Question 2</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control" placeholder="Default Input">
+                              <input type="text" class="form-control" placeholder="Default Input" required>
                             </div>
                           </div>
                           
@@ -198,12 +233,15 @@
                           <div class="form-group">
                             <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                               <button class="btn btn-primary" type="reset">Reset</button>
-                              <button type="submit" class="btn btn-success">Save as Cancelled</button>
+                              <%= f.submit 'Save as Canceled', :class => 'btn btn-success' %>
                             </div>
                           </div>
-                        </form>                  
+                        <% end %>                  
                       </div>
+                      <!-- End Cancel -->
                     </div>
                   </div>
                 </div>
               </div>
+
+              

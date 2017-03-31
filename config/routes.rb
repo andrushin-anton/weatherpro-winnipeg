@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   
+  get 'attachmets/new'
+
   get 'installerschedule/:id', to: 'installer_schedule#show', as: 'installerschedule'
   get 'installerschedule/:id/date/:date', to: 'installer_schedule#show', as: 'installerscheduledate'
   post 'installerscheduleupdate', to: 'installer_schedule#update', as: 'installerscheduleupdate'
@@ -27,6 +29,8 @@ Rails.application.routes.draw do
   get 'appointments/date/:date', to: 'appointments#index'
   patch 'users/update_password/:id', to: 'users#update_password', as: 'update_password'
   patch 'users/activate/:id', to: 'users#activate', as: 'user_activate'
+
+  match '/new/:id' => 'attachments#new',   :via => :POST, :as => :new
 
   root to: 'appointments#index'
 

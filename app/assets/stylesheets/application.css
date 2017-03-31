@@ -13,6 +13,7 @@
  *= require_tree .
  *= require_self
  *= require bootstrap-datepicker
+ *= require s3_direct_upload_progress_bars
  */
                 
                 .top_search .input-group-btn .search {

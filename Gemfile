@@ -31,6 +31,8 @@ gem 'rails_12factor', group: :production
 
 gem 'access-granted', '~> 1.0.0'
 
+gem 's3_direct_upload'
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks

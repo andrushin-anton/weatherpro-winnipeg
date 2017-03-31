@@ -8,6 +8,7 @@ class Appointment < ApplicationRecord
     validates :new_customer_email, allow_blank: true, length: { maximum: 70 }, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }, :if => :is_new_customer?
     
     belongs_to :customer
+    has_many :attachments
 
     enum statuses: { assigned: :Assigned, lead: :Lead, reschedule: :Reschedule, upSell: :UpSell, referral: :Referral, cancelled: :Cancelled, sold: :Sold, followUp: :FollowUp }
 
