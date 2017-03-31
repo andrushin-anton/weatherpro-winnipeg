@@ -23,6 +23,11 @@ $(document).on('turbolinks:load', function() {
         $("input:checkbox").prop('checked', $(this).prop("checked"));
     });
 
+    $(".day-checkbox").change(function() {
+        var day = $(this).val();
+        $("." + day).prop('checked', $(this).prop("checked"));
+    });
+
     $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
     $('.datepicker').change(function() {
         var date = new Date($(this).val());

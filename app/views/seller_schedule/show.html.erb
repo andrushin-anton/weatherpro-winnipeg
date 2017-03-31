@@ -129,6 +129,11 @@
                   <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 20 %>
                 </tr>
 
+                <tr>
+                  <td></td>
+                  <%= render 'checkboxes', days_from_this_week: @days_from_this_week %>
+                </tr>
+
               </table>
 
               <input type="hidden" name="seller_id" value="<%= @seller.id %>">

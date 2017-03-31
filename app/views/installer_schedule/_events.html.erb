@@ -29,7 +29,7 @@
     <% if defined? hour %>
 
         <% date_time = day.strftime('%Y-%m-%d ' + hour.to_s + ':00:00') %>
-        <input type="checkbox" name="schedule_time[]" value="<%= date_time %>" <% if @schedule.include? date_time %>checked<% end %>>
+        <input class="<%= day.to_s %>" type="checkbox" name="schedule_time[]" value="<%= date_time %>" <% if @schedule.include? date_time %>checked<% end %>>
     
     <% end %>
 </td>

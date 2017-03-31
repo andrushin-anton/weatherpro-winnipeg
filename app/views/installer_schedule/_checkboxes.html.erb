@@ -1,0 +1,5 @@
+<% days_from_this_week.each do |day|%>
+<td data-date="<%= day.to_s %>">
+    <input class="day-checkbox" type="checkbox" value="<%= day.to_s %>">
+</td>
+<% end %>

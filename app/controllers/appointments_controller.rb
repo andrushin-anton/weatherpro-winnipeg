@@ -27,8 +27,8 @@ class AppointmentsController < ApplicationController
     @followups = Appointment.search_followups(current_user, params[:search], start_time, end_time)
     
     # get sellers and installers for admins
-    @sellers = User.where(role: 'seller').all
-    @installers = User.where(role: 'installer').all
+    @sellers = User.where(:status => 'ACTIVE', :role => 'seller').all
+    @installers = User.where(:status => 'ACTIVE', :role => 'installer').all
 
     # get bookins available for admins and managers
     if current_user.role == 'admin' || current_user.role == 'manager'
@@ -99,6 +99,8 @@ class AppointmentsController < ApplicationController
     authorize! :create, Appointment
 
     @appointment = Appointment.new(appointment_params)
+    @sellers = User.where(:status => 'ACTIVE', :role => 'seller', :id => SellerSchedule.seller_ids_by_date_range(@appointment.schedule_time, @appointment.end_time))
+    @installers = User.where(:status => 'ACTIVE', :role => 'installer', :id => InstallerSchedule.installer_ids_by_date_range(@appointment.schedule_time, @appointment.end_time))
 
     respond_to do |format|
       if @appointment.save

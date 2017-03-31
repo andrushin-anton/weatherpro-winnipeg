@@ -89,6 +89,9 @@
         <div class="top_nav">
           <div class="nav_menu">
             <nav>
+            <% flash.each do |name, msg| %>
+            <div class="flash_message">Message: <%= msg%></div>
+            <% end %>
               <!-- <div class="nav toggle">
                 <a id="menu_toggle"><i class="fa fa-bars"></i></a>
               </div> -->
@@ -112,18 +115,9 @@
 
         <!-- page content -->
         <div class="right_col" role="main" style="min-height:100vh;">
-
-        <% flash.each do |name, msg| %>
-        <div class="alert alert-info alert-dismissible" role="alert" style="position:absolute;">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <strong>Message:</strong> <%= msg%>
-        </div>
-        <% end %>
-
-        <div class="x_panel">
-          <%= yield %>
-        </div>
-      
+          <div class="x_panel">
+            <%= yield %>
+          </div>
         </div>
         <!-- /page content -->
 
