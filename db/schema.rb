@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170331191451) do
+ActiveRecord::Schema.define(version: 20170331231907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,11 @@ ActiveRecord::Schema.define(version: 20170331191451) do
     t.datetime "updated_at",          null: false
     t.datetime "end_time"
     t.datetime "followup_time"
+    t.index ["followup_time"], name: "index_appointments_on_followup_time", using: :btree
+    t.index ["installer_id"], name: "index_appointments_on_installer_id", using: :btree
+    t.index ["schedule_time"], name: "index_appointments_on_schedule_time", using: :btree
+    t.index ["seller_id"], name: "index_appointments_on_seller_id", using: :btree
+    t.index ["status"], name: "index_appointments_on_status", using: :btree
   end
 
   create_table "articles", force: :cascade do |t|
@@ -56,6 +61,7 @@ ActiveRecord::Schema.define(version: 20170331191451) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.string   "file_name"
+    t.index ["appointment_id"], name: "index_attachments_on_appointment_id", using: :btree
   end
 
   create_table "audits", force: :cascade do |t|
@@ -96,6 +102,8 @@ ActiveRecord::Schema.define(version: 20170331191451) do
     t.integer  "installer_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.index ["installer_id"], name: "index_installer_schedules_on_installer_id", using: :btree
+    t.index ["schedule_time"], name: "index_installer_schedules_on_schedule_time", using: :btree
   end
 
   create_table "seller_schedules", force: :cascade do |t|
@@ -103,6 +111,8 @@ ActiveRecord::Schema.define(version: 20170331191451) do
     t.integer  "seller_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.index ["schedule_time"], name: "index_seller_schedules_on_schedule_time", using: :btree
+    t.index ["seller_id"], name: "index_seller_schedules_on_seller_id", using: :btree
   end
 
   create_table "statuses", force: :cascade do |t|
@@ -123,6 +133,8 @@ ActiveRecord::Schema.define(version: 20170331191451) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "status"
+    t.index ["role"], name: "index_users_on_role", using: :btree
+    t.index ["status"], name: "index_users_on_status", using: :btree
   end
 
 end
