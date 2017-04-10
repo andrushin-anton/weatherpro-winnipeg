@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :administrators
   resources :managers
   resources :sellers
+  resources :telemarketers
   resources :installers
   resources :customers
   resources :sessions

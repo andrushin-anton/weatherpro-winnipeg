@@ -24,7 +24,7 @@
       <div class="x_panel">
         <div class="x_title">
 
-          <% unless current_user.role == 'admin' %>
+          <% unless current_user.role == 'admin' || current_user.role == 'master' %>
           <h2>Click to add/edit</h2>
           <% else %>
           <h2>Click to add/edit<small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Choose seller or installer to update their schedule:</small></h2>

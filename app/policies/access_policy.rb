@@ -46,7 +46,8 @@ class AccessPolicy
         :index, :create, :new, :show, :edit, :update, :destroy, :update_password, 
         :password, :activate, :administrators, :administrators_new, :administrators_create,
         :sellers, :sellers_new, :sellers_create,
-        :installers, :installers_new, :installers_create
+        :installers, :installers_new, :installers_create,
+        :telemarketers, :telemarketers_new, :telemarketers_create
       ], User
       can [:index, :logs], Logs
       
@@ -60,7 +61,8 @@ class AccessPolicy
       can [
         :index, :create, :new, :show, :edit, :update, :destroy, :update_password, 
         :password, :activate, :sellers, :sellers_new, :sellers_create,
-        :installers, :installers_new, :installers_create
+        :installers, :installers_new, :installers_create,
+        :telemarketers, :telemarketers_new, :telemarketers_create
       ], User
       can [:index, :logs], Logs
       
@@ -88,6 +90,16 @@ class AccessPolicy
     role :installer, proc { |user| user.role == 'installer' } do
       can [:index, :update, :show], Appointment do |appointment, user|
         appointment.installer_id == user.id
+      end
+      
+      can [:password, :update_password], User do |obj, user|
+        obj.id == user.id
+      end
+    end
+
+    role :telemarketer, proc { |user| user.role == 'telemarketer' } do
+      can [:index, :update, :show, :new, :create], Appointment do |appointment, user|
+        appointment.status == 'Telemarketing'
       end
       
       can [:password, :update_password], User do |obj, user|

@@ -18,7 +18,14 @@ class AppointmentsController < ApplicationController
     @days_from_this_week = (today.at_beginning_of_week..today.at_end_of_week).map
     
     # start and end dates for cursors
-    start_time = Time.parse(today.at_beginning_of_week.to_s)
+    # telemarketers can see only future
+    if current_user.role == 'telemarketer'
+      today = Date.today if today < Date.today      
+      start_time = Time.parse(today.at_beginning_of_week.to_s)
+    else 
+      start_time = Time.parse(today.at_beginning_of_week.to_s)
+    end
+  
     end_time = Time.parse(today.at_end_of_week.to_s)
     
     # get appointments
@@ -31,7 +38,7 @@ class AppointmentsController < ApplicationController
     @installers = User.where(:status => 'ACTIVE', :role => 'installer').all
 
     # get bookins available for admins and managers
-    if current_user.role == 'admin' || current_user.role == 'manager'
+    if current_user.role == 'admin' || current_user.role == 'manager' || current_user.role == 'master' || current_user.role == 'telemarketer'
       @sellerschedule = SellerSchedule.search_by_date_range(start_time, end_time)
       @installerschedule = InstallerSchedule.search_by_date_range(start_time, end_time)
     end

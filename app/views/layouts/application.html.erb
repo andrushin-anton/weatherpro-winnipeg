@@ -50,6 +50,9 @@
                     <% if can? :installers, User %>
                       <li class="<%= 'current-page' if params[:controller] == 'installers' || params[:controller] == 'installer_schedule' %>"><a href="<%= installers_path%>">Installers</a></li>
                     <% end %>
+                    <% if can? :telemarketers, User %>
+                      <li class="<%= 'current-page' if params[:controller] == 'telemarketers' %>"><a href="<%= telemarketers_path%>">Telemarketers</a></li>
+                    <% end %>
                     <% if can? :managers, User %>
                       <li class="<%= 'current-page' if params[:controller] == 'managers' %>"><a href="<%= managers_path%>">Managers</a></li>
                     <% end %>

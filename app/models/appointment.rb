@@ -10,7 +10,7 @@ class Appointment < ApplicationRecord
     belongs_to :customer
     has_many :attachments
 
-    enum statuses: { assigned: :Assigned, lead: :Lead, reschedule: :Reschedule, upSell: :UpSell, referral: :Referral, cancelled: :Cancelled, sold: :Sold, followUp: :FollowUp }
+    enum statuses: { assigned: :Assigned, lead: :Lead, reschedule: :Reschedule, upSell: :UpSell, referral: :Referral, cancelled: :Cancelled, sold: :Sold, followUp: :FollowUp, telemarketing: :Telemarketing }
 
     attr_accessor :new_customer_first_name, :new_customer_last_name, :new_customer_phone, :new_customer_email
 
@@ -26,7 +26,7 @@ class Appointment < ApplicationRecord
     def self.search(user, search, start_time, end_time)
         if search
             #Admins and Managers
-            if user.role == 'admin' || user.role == 'manager' 
+            if user.role == 'admin' || user.role == 'manager' || user.role == 'master'
                 #search for sellers and get their ids
                 sellers_ids = User.search_sellers(search)
                 if sellers_ids.length > 0
@@ -40,12 +40,21 @@ class Appointment < ApplicationRecord
                         "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%"
                     ).order('id DESC').all
                 end
+
+            #Telemarketers
+            elsif user.role == 'telemarketer'
+                self.joins(:customer).where(
+                    'schedule_time >= ? AND appointments.status = ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?)', 
+                    Date.today, "#{self.statuses[:telemarketing]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%"
+                ).order('id DESC').all
+
             #Sellers only
             elsif user.role == 'seller'
                 self.where(
                     'status != ? AND (address LIKE ? OR city LIKE ?) AND seller_id = ?', 
                     "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", user.id
                 ).order('id DESC').all
+
             #Installers
             else
                 self.where(
@@ -55,10 +64,15 @@ class Appointment < ApplicationRecord
             end                
 
         else
-            if user.role == 'admin' || user.role == 'manager' 
+            if user.role == 'admin' || user.role == 'manager' || user.role == 'master'
                 self.where(
                     'status != ? AND schedule_time >= ? AND schedule_time < ?',
                     "#{self.statuses[:followUp]}", start_time, end_time
+                ).order('id DESC').all
+            elsif user.role == 'telemarketer'
+                self.where(
+                    'status = ? AND schedule_time >= ? AND schedule_time < ?', 
+                    "#{self.statuses[:telemarketing]}", start_time, end_time
                 ).order('id DESC').all
             elsif user.role == 'seller'
                 self.where(
@@ -76,7 +90,7 @@ class Appointment < ApplicationRecord
 
     def self.search_followups(user, search, start_time, end_time)
         if search
-            if user.role == 'admin' || user.role == 'manager' 
+            if user.role == 'admin' || user.role == 'manager' || user.role == 'master'
                 
                 sellers_ids = User.search_sellers(search)
                 if sellers_ids.length > 0
@@ -96,19 +110,25 @@ class Appointment < ApplicationRecord
                     'status = ? AND (address LIKE ? OR city LIKE ?) AND seller_id = ?', 
                     "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", user.id
                 ).order('id DESC').all
-            else
+
+            elsif user.role == 'installer'
                 self.where(
                     'status = ? AND (address LIKE ? OR city LIKE ?) AND installer_id = ?', 
                     "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", user.id
                 ).order('id DESC').all
+
+            else
+                return []
             end                
         else
-            if user.role == 'admin' || user.role == 'manager' 
+            if user.role == 'admin' || user.role == 'manager' || user.role == 'master' 
                 self.where('status = ? AND followup_time >= ? AND followup_time < ?', "#{self.statuses[:followUp]}", start_time, end_time).order('id DESC').all
             elsif user.role == 'seller'
                 self.where('status = ? AND followup_time >= ? AND followup_time < ? AND seller_id = ?', "#{self.statuses[:followUp]}", start_time, end_time, user.id).order('id DESC').all
-            else
+            elsif user.role == 'installer'
                 self.where('status = ? AND followup_time >= ? AND followup_time < ? AND installer_id = ?', "#{self.statuses[:followUp]}", start_time, end_time, user.id).order('id DESC').all
+            else
+                return []
             end
         end
     end
@@ -180,6 +200,8 @@ class Appointment < ApplicationRecord
         when :Assigned
             return '#FF902F'
         when :Reschedule
+            return '#3A29D2'
+        when :Telemarketing
             return '#3A29D2'
         when :UpSell
             return '#d28f3e'
