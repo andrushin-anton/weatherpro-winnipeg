@@ -45,7 +45,7 @@
                       <li class="<%= 'current-page' if params[:controller] == 'customers' %>"><a href="<%= customers_path %>">Customers</a></li>
                     <% end %>
                     <% if can? :sellers, User %>
-                      <li class="<%= 'current-page' if params[:controller] == 'sellers' || params[:controller] == 'seller_schedule' %>"><a href="<%= sellers_path%>">Sellers</a></li>
+                      <li class="<%= 'current-page' if params[:controller] == 'sellers' || params[:controller] == 'seller_schedule' %>"><a href="<%= sellers_path%>">Project Managers</a></li>
                     <% end %>
                     <% if can? :installers, User %>
                       <li class="<%= 'current-page' if params[:controller] == 'installers' || params[:controller] == 'installer_schedule' %>"><a href="<%= installers_path%>">Installers</a></li>
