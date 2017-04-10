@@ -37,7 +37,7 @@ class AccessPolicy
     #  can :read, Comment
     # end
 
-    role :admin, proc { |user| user.role == 'admin' } do
+    role :master, proc { |user| user.role == 'master' } do
       can [:index, :create, :new, :show, :edit, :update, :destroy], Appointment
       can [:index, :create, :new, :show, :edit, :update, :destroy], Customer
       can [:show, :update], SellerSchedule
@@ -46,6 +46,20 @@ class AccessPolicy
         :index, :create, :new, :show, :edit, :update, :destroy, :update_password, 
         :password, :activate, :administrators, :administrators_new, :administrators_create,
         :sellers, :sellers_new, :sellers_create,
+        :installers, :installers_new, :installers_create
+      ], User
+      can [:index, :logs], Logs
+      
+    end
+
+    role :admin, proc { |user| user.role == 'admin' } do
+      can [:index, :create, :new, :show, :edit, :update, :destroy], Appointment
+      can [:index, :create, :new, :show, :edit, :update, :destroy], Customer
+      can [:show, :update], SellerSchedule
+      can [:show, :update], InstallerSchedule
+      can [
+        :index, :create, :new, :show, :edit, :update, :destroy, :update_password, 
+        :password, :activate, :sellers, :sellers_new, :sellers_create,
         :installers, :installers_new, :installers_create
       ], User
       can [:index, :logs], Logs

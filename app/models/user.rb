@@ -25,7 +25,7 @@ class User < ApplicationRecord
     end
 
     def self.roles
-        {admin: :admin, manager: :manager , seller: :seller, installer: :installer}
+        {master: :master, admin: :admin, manager: :manager , seller: :seller, installer: :installer, telemarketer: :telemarketer}
     end    
 
      private
