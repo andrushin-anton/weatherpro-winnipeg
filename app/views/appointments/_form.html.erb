@@ -14,7 +14,7 @@
       <% if current_user.role == 'telemarketer' %>
       <%= f.hidden_field :status, value: :Telemarketing %>
       <% else %>
-      <%= f.hidden_field :status, value: :Assigned %>
+      <%= f.hidden_field :status, value: :Lead %>
       <% end %>
 
       <div class="form-group">

@@ -1,5 +1,7 @@
 class Appointment < ApplicationRecord
     audited
+    on_change :seller_id, :process_status
+
     validates :address, presence: true
     validates :customer_id, presence: true, :unless => :is_new_customer?
     validates :new_customer_first_name, presence: true, :if => :is_new_customer?
@@ -10,7 +12,7 @@ class Appointment < ApplicationRecord
     belongs_to :customer
     has_many :attachments
 
-    enum statuses: { assigned: :Assigned, lead: :Lead, reschedule: :Reschedule, upSell: :UpSell, referral: :Referral, cancelled: :Cancelled, sold: :Sold, followUp: :FollowUp, telemarketing: :Telemarketing }
+    enum statuses: {confirmed: :Confirmed, assigned: :Assigned, lead: :Lead, reschedule: :Reschedule, upSell: :UpSell, referral: :Referral, cancelled: :Cancelled, sold: :Sold, followUp: :FollowUp, telemarketing: :Telemarketing }
 
     attr_accessor :new_customer_first_name, :new_customer_last_name, :new_customer_phone, :new_customer_email
 
@@ -21,6 +23,13 @@ class Appointment < ApplicationRecord
             return false
         end
     end
+
+    def process_status(attr_name, old_value, new_value)
+        if old_value.nil?
+            self.status = 'Assigned' unless new_value.nil?
+        end
+    end
+    
 
     #Appointments
     def self.search(user, search, start_time, end_time)
@@ -194,14 +203,18 @@ class Appointment < ApplicationRecord
     
 
     def color
+        
         case self.status.to_sym
+        
         when :Lead
             return '#583030'
         when :Assigned
             return '#FF902F'
-        when :Reschedule
-            return '#3A29D2'
+        when :Confirmed
+            return '#FF902F'
         when :Telemarketing
+            return '#3A29D2'
+        when :Reschedule
             return '#3A29D2'
         when :UpSell
             return '#d28f3e'
@@ -218,8 +231,28 @@ class Appointment < ApplicationRecord
         end
     end
 
-    def details_for_quick_view
-        {customer: self.customer.full_name, address: self.address, city: self.city, province: self.province}
+
+    def info_icon
+        
+        case self.status.to_sym
+        
+        when :Lead
+            return '<img src="/images/unassigned.gif" style="width:20px;float:right;padding-right:1px;">'
+        when :Reschedule
+            return '<img src="/images/unassigned.gif" style="width:20px;float:right;padding-right:1px;">'
+        when :Telemarketing
+            return '<img src="/images/unassigned.gif" style="width:20px;float:right;padding-right:1px;">'
+        when :Referral
+            return '<img src="/images/unassigned.gif" style="width:20px;float:right;padding-right:1px;">'
+        when :UpSell
+            return '<img src="/images/unassigned.gif" style="width:20px;float:right;padding-right:1px;">'
+        when :Assigned
+            return '<img src="/images/not_confirmed.png" style="width:20px;float:right;padding-right:1px;">'
+        when :Confirmed
+            return '<img src="/images/checkmark.png" style="width:20px;float:right;padding-right:1px;">'
+        else
+            return ''
+        end
     end
 
     before_create do
@@ -234,6 +267,12 @@ class Appointment < ApplicationRecord
             
             self.customer_id = customer.id
         end
+
+        # if project manager was assigned - change the status to Assigned
+        unless self.seller_id.nil?
+            self.status = 'Assigned'
+        end
+        
     end
 
 end

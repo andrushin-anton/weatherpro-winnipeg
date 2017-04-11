@@ -13,6 +13,9 @@ class InstallerScheduleController < ApplicationController
 
     @prev_url = installerschedule_path(@installer) + '/date/' + (today - 1.week).to_s
     @next_url = installerschedule_path(@installer) + '/date/' + (today + 1.week).to_s
+
+    @prev_month_url = installerschedule_path(@installer) + '/date/' + (today - 1.month).to_s
+    @next_month_url = installerschedule_path(@installer) + '/date/' + (today + 1.month).to_s
     
     # all current week days
     @days_from_this_week = (today.at_beginning_of_week..today.at_end_of_week).map

@@ -49,13 +49,14 @@
                 <br>
                 <%= app.city %>
                 <% if sellers.length > 0 %>
-                <% sellers.each do |selesman| %>
-                <% if selesman.id == app.seller_id %>
-                <br>
-                <%= selesman.first_name %>
+                    <% sellers.each do |selesman| %>
+                        <% if selesman.id == app.seller_id %>
+                        <br>
+                        <%= selesman.first_name %>
+                        <% end %>
+                    <% end %>
                 <% end %>
-                <% end %>
-                <% end %>
+                <%= app.info_icon.html_safe %>
             </div>
             </a>        
             <% end %>
