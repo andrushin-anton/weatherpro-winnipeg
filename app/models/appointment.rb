@@ -25,8 +25,8 @@ class Appointment < ApplicationRecord
     end
 
     def process_status(attr_name, old_value, new_value)
-        if old_value.nil?
-            self.status = 'Assigned' unless new_value.nil?
+        if old_value.nil? || old_value == ''
+            self.status = 'Assigned' if new_value != ''
         end
     end
     
@@ -266,13 +266,7 @@ class Appointment < ApplicationRecord
             customer.save
             
             self.customer_id = customer.id
-        end
-
-        # if project manager was assigned - change the status to Assigned
-        unless self.seller_id.nil?
-            self.status = 'Assigned'
-        end
-        
+        end        
     end
 
 end

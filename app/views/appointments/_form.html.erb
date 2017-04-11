@@ -11,32 +11,75 @@
         </div>
       <% end %>
 
-      <% if current_user.role == 'telemarketer' %>
-      <%= f.hidden_field :status, value: :Telemarketing %>
-      <% else %>
-      <%= f.hidden_field :status, value: :Lead %>
-      <% end %>
+      <%= f.hidden_field :schedule_time, value: appointment.schedule_time.to_formatted_s(:db) %>
+      <%= f.hidden_field :end_time, value: appointment.end_time.to_formatted_s(:db) %>
+
+      <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">Schedule time</label>
+          <div class="col-md-9 col-sm-9 col-xs-12">
+            <input type="text" class='form-control' value="<%= appointment.schedule_time.to_formatted_s(:short) %> - <%= appointment.end_time.to_formatted_s(:short) %>" disabled="disabled">
+          </div>
+      </div>
+
+      <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">Do you require supply and install</label>
+          <div class="col-md-9 col-sm-9 col-xs-12">
+            <%= f.select :supply_install, {supplyAndInstall: 'Supply & Install', supplyOnly: 'Supply Only'}.values, {}, {:class => 'form-control'} %>
+          </div>
+      </div>
+
+      <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">Are all homeowners would be present during appointment</label>
+          <div class="col-md-9 col-sm-9 col-xs-12">
+            <%= f.select :homeoweners_at_home, {yes: :yes, no: :no}, {}, {:class => 'form-control'} %>
+          </div>
+      </div>
 
       <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Is new Customer</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
             <%= f.label :is_new_customer, "Yes", :value => 1  %>
-            <% unless appointment.is_new_customer? %>
-            <%= f.radio_button :is_new_customer, 1 %>
-            <% else %>
             <%= f.radio_button :is_new_customer, 1, :checked => true %>
-            <% end %>
+
             <%= f.label :is_new_customer, "Existing", :value => 0  %>
-            <% unless appointment.is_new_customer? %>
-            <%= f.radio_button :is_new_customer, 0, :checked => true %>
-            <% else %>
             <%= f.radio_button :is_new_customer, 0 %>
-            <% end %>
+            
           </div>
       </div>
 
-      <div id="new_customer" <% unless appointment.is_new_customer? %>style="display:none;"<% end %>>
+      
 
+      <div class="form-group" id="existing_customer" style="display:none;">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer</label>
+          <div class="col-md-9 col-sm-9 col-xs-12">
+            <%= f.select :customer_id, options_for_select(@customers.map{ |c| [c.full_name, c.id] }), {:include_blank => 'None Specified'}, { class: 'form-control' } %>
+          </div>
+      </div>
+
+
+      <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">Appointment Type</label>
+          <div class="col-md-9 col-sm-9 col-xs-12">
+          <% if current_user.role == 'telemarketer' %>
+            <%= f.select :status, options_for_select({telemarketing: :Telemarketing }.values, :telemarketing), {}, { class: 'form-control' } %>
+          <% else %>
+            <%= f.select :status, options_for_select({lead: :Lead, reschedule: :Reschedule, upSell: :UpSell, referral: :Referral, telemarketing: :Telemarketing }.values, :lead), {}, { class: 'form-control' } %>
+          <% end %>
+          </div>
+      </div>
+
+      
+      <% if current_user.role == 'admin' || current_user.role == 'master' %>
+      <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">Project Manager</label>
+          <div class="col-md-9 col-sm-9 col-xs-12">
+            <%= f.select :seller_id, options_for_select(@sellers.map{ |c| [c.full_name, c.id] }), {:include_blank => 'None Specified'}, { class: 'form-control' } %>
+          </div>
+      </div>
+      <% end %>
+
+
+      <div id="new_customer">
         <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">First Name</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
@@ -71,40 +114,7 @@
 
       </div>
 
-      <div class="form-group" id="existing_customer" <% if appointment.is_new_customer? %>style="display:none;"<% end %>>
-          <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer</label>
-          <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.select :customer_id, options_for_select(@customers.map{ |c| [c.full_name, c.id] }), {:include_blank => 'None Specified'}, { class: 'form-control' } %>
-          </div>
-      </div>
 
-      <%= f.hidden_field :schedule_time, value: appointment.schedule_time.to_formatted_s(:db) %>
-      <%= f.hidden_field :end_time, value: appointment.end_time.to_formatted_s(:db) %>
-
-      <div class="form-group">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12">Schedule time</label>
-          <div class="col-md-9 col-sm-9 col-xs-12">
-            <input type="text" class='form-control' value="<%= appointment.schedule_time.to_formatted_s(:short) %> - <%= appointment.end_time.to_formatted_s(:short) %>" disabled="disabled">
-          </div>
-      </div>
-
-      <% if current_user.role == 'admin' || current_user.role == 'master' %>
-      <div class="form-group">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12">Seller</label>
-          <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.select :seller_id, options_for_select(@sellers.map{ |c| [c.full_name, c.id] }), {:include_blank => 'None Specified'}, { class: 'form-control' } %>
-          </div>
-      </div>
-      <% end %>
-
-      <% unless current_user.role == 'telemarketer' %>
-      <div class="form-group">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12">Installer</label>
-          <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.select :installer_id, options_for_select(@installers.map{ |c| [c.full_name, c.id] }), {:include_blank => 'None Specified'}, { class: 'form-control' } %>
-          </div>
-      </div>
-      <% end %>
 
       <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Address</label>
@@ -169,19 +179,7 @@
           </div>
       </div>
 
-      <div class="form-group">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12">Are all homeowners would be present during appointment</label>
-          <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.select :homeoweners_at_home, {yes: :yes, no: :no}, {}, {:class => 'form-control'} %>
-          </div>
-      </div>
-
-      <div class="form-group">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12">Do you require supply and install</label>
-          <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.select :supply_install, {yes: :yes, no: :no}, {}, {:class => 'form-control'} %>
-          </div>
-      </div>
+      
 
       <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Do you need financing</label>
