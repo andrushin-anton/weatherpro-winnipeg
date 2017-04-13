@@ -19,6 +19,9 @@
 //= require s3_direct_upload
 
 $(document).on('turbolinks:load', function() {
+    $('.cell-phone').mask('000-000-0000');
+    $('.home-phone').mask('000-000-0000');
+
     $(".select-all-checkboxes").change(function() {
         $("input:checkbox").prop('checked', $(this).prop("checked"));
     });
@@ -28,11 +31,22 @@ $(document).on('turbolinks:load', function() {
         $("." + day).prop('checked', $(this).prop("checked"));
     });
 
+    $('.datepicker-seller').datepicker({ dateFormat: 'yy-mm-dd' });
+    $('.datepicker-seller').change(function() {
+        var date = new Date($(this).val());
+        var corrected_date = date.getFullYear() + '-' + (parseInt(date.getMonth()) + 1) + '-' + date.getDate();
+        $("#corrected_date").val(corrected_date);
+    });
+
     $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
     $('.datepicker').change(function() {
         var date = new Date($(this).val());
         var corrected_date = date.getFullYear() + '-' + (parseInt(date.getMonth()) + 1) + '-' + date.getDate();
-        $("#followup_date").val(corrected_date);
+        $("#corrected_date").val(corrected_date);
+
+        find_booking_available(corrected_date).done(function(data) {
+            $('#time-frame-select').html(data);
+        });
     });
 
     $('#s3_uploader').S3Uploader({
@@ -50,6 +64,12 @@ $(document).on('turbolinks:load', function() {
 });
 
 
+function find_booking_available(date) {
+    return $.ajax({
+        url: '/bookings/available/' + date,
+        type: 'GET'
+    });
+}
 
 function redirect(url) {
     window.location.href = url;
@@ -68,4 +88,39 @@ function select_seller_option(value) {
         $('.seller-action-form').hide();
         $('#canceled-seller-action-form').show();
     }
+}
+
+function select_appointment_time_frame(value) {
+    var schedule_time = $('#corrected_date').val();
+    var schedule_date = schedule_time.split(' ')[0];
+    var end_time = processEndTime(value);
+
+    $('#corrected_date').val(schedule_date + ' ' + value);
+    $('#end_time').val(schedule_date + ' ' + end_time);
+}
+
+function processEndTime(value) {
+    var end_time = '09:59:59';
+    if (value == '09:00:00') {
+        end_time = '09:59:59';
+    }
+    if (value == '10:00:00') {
+        end_time = '11:59:59';
+    }
+    if (value == '12:00:00') {
+        end_time = '13:59:59';
+    }
+    if (value == '14:00:00') {
+        end_time = '15:59:59';
+    }
+    if (value == '16:00:00') {
+        end_time = '17:59:59';
+    }
+    if (value == '18:00:00') {
+        end_time = '19:59:59';
+    }
+    if (value == '20:00:00') {
+        end_time = '21:00:00';
+    }
+    return end_time;
 }

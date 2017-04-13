@@ -66,8 +66,12 @@
           <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
         </div>
 
+        <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+        <input type="text" class='form-control has-feedback-left' value="<%= @customer.home_phone %>" disabled="disabled">
+          <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+        </div>
+
         <div class="form-group">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12">Details</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
             <textarea rows="10" class='form-control' disabled="disabled" style='z-index: auto; position: relative; line-height: 20px; font-size: 14px; transition: none; background: transparent !important;'><%= @customer.details%></textarea>
           </div>

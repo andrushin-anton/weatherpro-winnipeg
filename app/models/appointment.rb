@@ -1,7 +1,5 @@
-class Appointment < ApplicationRecord
+class Appointment < ApplicationRecord    
     audited
-    on_change :seller_id, :process_status
-
     validates :address, presence: true
     validates :customer_id, presence: true, :unless => :is_new_customer?
     validates :new_customer_first_name, presence: true, :if => :is_new_customer?
@@ -12,9 +10,10 @@ class Appointment < ApplicationRecord
     belongs_to :customer
     has_many :attachments
 
-    enum statuses: {confirmed: :Confirmed, assigned: :Assigned, lead: :Lead, reschedule: :Reschedule, upSell: :UpSell, referral: :Referral, cancelled: :Cancelled, sold: :Sold, followUp: :FollowUp, telemarketing: :Telemarketing }
+    enum statuses: { Assigned: :Assigned, Lead: :Lead, Reschedule: :Reschedule, UpSell: :UpSell, Referral: :Referral, Cancelled: :Cancelled, Sold: :Sold, FollowUp: :FollowUp, Telemarketing: :Telemarketing }
+    enum types: { Confirmed: :Confirmed, Unconfirmed: :Unconfirmed }
 
-    attr_accessor :new_customer_first_name, :new_customer_last_name, :new_customer_phone, :new_customer_email
+    attr_accessor :new_customer_first_name, :new_customer_last_name, :new_customer_phone, :new_customer_home_phone, :new_customer_email
 
     def is_new_customer?        
         if self.new_record? && self.is_new_customer == 1
@@ -24,10 +23,11 @@ class Appointment < ApplicationRecord
         end
     end
 
-    def process_status(attr_name, old_value, new_value)
-        if old_value.nil? || old_value == ''
-            self.status = 'Assigned' if new_value != ''
+    def seller_id=(val)
+        if self.seller_id.nil? || self.seller_id == 0
+            self.status = 'Assigned' if val != ''
         end
+        write_attribute(:seller_id, val.to_i)
     end
     
 
@@ -247,9 +247,11 @@ class Appointment < ApplicationRecord
         when :UpSell
             return '<img src="/images/unassigned.gif" style="width:20px;float:right;padding-right:1px;">'
         when :Assigned
-            return '<img src="/images/not_confirmed.png" style="width:20px;float:right;padding-right:1px;">'
-        when :Confirmed
-            return '<img src="/images/checkmark.png" style="width:20px;float:right;padding-right:1px;">'
+            if self.app_type == 'Unconfirmed'
+                return '<img src="/images/not_confirmed.png" style="width:20px;float:right;padding-right:1px;">'
+            else
+                return '<img src="/images/checkmark.png" style="width:20px;float:right;padding-right:1px;">'
+            end
         else
             return ''
         end
@@ -262,11 +264,11 @@ class Appointment < ApplicationRecord
             customer.first_name = self.new_customer_first_name
             customer.last_name = self.new_customer_last_name
             customer.phone = self.new_customer_phone
+            customer.home_phone = self.new_customer_home_phone
             customer.email = self.new_customer_email
             customer.save
             
             self.customer_id = customer.id
         end        
     end
-
 end

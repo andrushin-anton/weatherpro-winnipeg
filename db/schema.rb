@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170331231907) do
+ActiveRecord::Schema.define(version: 20170412212745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,10 @@ ActiveRecord::Schema.define(version: 20170331231907) do
     t.datetime "updated_at",          null: false
     t.datetime "end_time"
     t.datetime "followup_time"
+    t.integer  "sealed"
+    t.string   "booking_by"
+    t.string   "type"
+    t.string   "app_type"
     t.index ["followup_time"], name: "index_appointments_on_followup_time", using: :btree
     t.index ["installer_id"], name: "index_appointments_on_installer_id", using: :btree
     t.index ["schedule_time"], name: "index_appointments_on_schedule_time", using: :btree
@@ -95,6 +99,7 @@ ActiveRecord::Schema.define(version: 20170331231907) do
     t.string   "status"
     t.string   "phone"
     t.string   "email"
+    t.string   "home_phone"
   end
 
   create_table "installer_schedules", force: :cascade do |t|

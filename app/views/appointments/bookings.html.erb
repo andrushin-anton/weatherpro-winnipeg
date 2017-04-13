@@ -1,0 +1,46 @@
+<% if @bookings.length != 0 %>
+<select id="schedule_time_select" class="form-control" onchange="this.options[this.selectedIndex].value && (select_appointment_time_frame(this.options[this.selectedIndex].value));">
+    <% @bookings.each do |item| %>
+    <% if item[:schedule_time].strftime("%H").to_i == 9 %>
+    <option value="09:00:00" <% if @bookings.first === item %>selected="true"<% end %>>9am-10am (<%= item[:available]%> bookings available)</option>
+    <% end %>
+    <% if item[:schedule_time].strftime("%H").to_i == 10 %>
+    <option value="10:00:00" <% if @bookings.first === item %>selected="true"<% end %>>10am-12am (<%= item[:available]%> bookings available)</option>
+    <% end %>
+    <% if item[:schedule_time].strftime("%H").to_i == 12 %>
+    <option value="12:00:00" <% if @bookings.first === item %>selected="true"<% end %>>12pm-2pm (<%= item[:available]%> bookings available)</option>
+    <% end %>
+    <% if item[:schedule_time].strftime("%H").to_i == 14 %>
+    <option value="14:00:00" <% if @bookings.first === item %>selected="true"<% end %>>2pm-4pm (<%= item[:available]%> bookings available)</option>
+    <% end %>
+    <% if item[:schedule_time].strftime("%H").to_i == 16 %>
+    <option value="16:00:00" <% if @bookings.first === item %>selected="true"<% end %>>4pm-6pm (<%= item[:available]%> bookings available)</option>
+    <% end %>
+    <% if item[:schedule_time].strftime("%H").to_i == 18 %>
+    <option value="18:00:00" <% if @bookings.first === item %>selected="true"<% end %>>6pm-8pm (<%= item[:available]%> bookings available)</option>
+    <% end %>
+    <% if item[:schedule_time].strftime("%H").to_i == 20 %>
+    <option value="20:00:00" <% if @bookings.first === item %>selected="true"<% end %>>8pm-9pm (<%= item[:available]%> bookings available)</option>
+    <% end %>
+    <% end %>
+</select>
+<script>
+    $(document).ready(function() {
+        // set selected time
+        var selected_time = $('#schedule_time_select').val();
+        var end_time = processEndTime(selected_time);
+        var corrected_date = $("#corrected_date").val().split(' ')[0];
+
+        $('#corrected_date').val(corrected_date + ' ' + selected_time);
+        $('#end_time').val(corrected_date + ' ' + end_time);
+        $('.submit').attr('disabled', false);
+    });
+</script>
+<% else %>
+<script>
+    $(document).ready(function() {
+        alert('No bookings available, please select another day');
+        $('.submit').attr('disabled', true);
+    });
+</script>
+<% end %>

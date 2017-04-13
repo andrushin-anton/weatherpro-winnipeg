@@ -1,6 +1,5 @@
 class AppointmentsController < ApplicationController
   before_action :set_appointment, only: [:show, :edit, :update, :destroy]
-  before_action :set_data, only: [:show, :edit, :new, :create, :update]
 
   # GET /appointments
   # GET /appointments.json
@@ -47,6 +46,14 @@ class AppointmentsController < ApplicationController
     end
   end
 
+  def bookings
+    today = Date.parse(params[:date])
+
+    @bookings = SellerSchedule.bookings_available(today, (today + 1.day))
+    render layout: false, status: 200 
+  end
+  
+
   # GET /appointments/1
   # GET /appointments/1.json
   def show
@@ -59,6 +66,9 @@ class AppointmentsController < ApplicationController
 
     schedule_time = Time.at(params[:unixtime].to_i).utc
     date = schedule_time.strftime("%Y-%m-%d")
+
+    @bookings = SellerSchedule.bookings_available(Date.parse(schedule_time.to_s), Date.parse((schedule_time + 1.day).to_s))
+   
     
     @appointment = Appointment.new
     # Process times
@@ -91,6 +101,8 @@ class AppointmentsController < ApplicationController
     @appointment.schedule_time = schedule_time
     @appointment.end_time = end_time
 
+    @appointment.booking_by = current_user.first_name + ' ' + current_user.last_name + ', ' + DateTime.now.to_formatted_s(:db)
+
     @sellers = User.where(:status => 'ACTIVE', :role => 'seller', :id => SellerSchedule.seller_ids_by_date_range(@appointment.schedule_time, @appointment.end_time))
     @installers = User.where(:status => 'ACTIVE', :role => 'installer', :id => InstallerSchedule.installer_ids_by_date_range(@appointment.schedule_time, @appointment.end_time))
   end
@@ -111,6 +123,8 @@ class AppointmentsController < ApplicationController
     @appointment = Appointment.new(appointment_params)
     @sellers = User.where(:status => 'ACTIVE', :role => 'seller', :id => SellerSchedule.seller_ids_by_date_range(@appointment.schedule_time, @appointment.end_time))
     @installers = User.where(:status => 'ACTIVE', :role => 'installer', :id => InstallerSchedule.installer_ids_by_date_range(@appointment.schedule_time, @appointment.end_time))
+    @bookings = SellerSchedule.bookings_available(Date.parse(@appointment.schedule_time.to_s), Date.parse((@appointment.schedule_time + 1.day).to_s), @appointment)
+    @appointment.booking_by = current_user.first_name + ' ' + current_user.last_name + ', ' + DateTime.now.to_formatted_s(:db)
 
     respond_to do |format|
       if @appointment.save
@@ -155,15 +169,18 @@ class AppointmentsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_appointment
       @appointment = Appointment.find(params[:id])
-    end
+      @customer = Customer.find(@appointment.customer_id)
+      @appointment.new_customer_phone = @customer.phone
+      @appointment.new_customer_home_phone = @customer.home_phone
+      @appointment.new_customer_first_name = @customer.first_name
+      @appointment.new_customer_last_name = @customer.last_name
+      @appointment.new_customer_email = @customer.email
 
-    def set_data
-      @customers = Customer.where(:status => 'ACTIVE').all()
-    end
-    
+      @bookings = SellerSchedule.bookings_available(Date.parse(@appointment.schedule_time.to_s), Date.parse((@appointment.schedule_time + 1.day).to_s), @appointment)
+    end   
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def appointment_params
-      params.require(:appointment).permit(:followup_time, :new_customer_first_name, :new_customer_last_name, :new_customer_phone, :new_customer_email, :status, :is_new_customer, :schedule_time, :end_time, :comments, :seller_id, :customer_id, :address, :city, :province, :postal_code, :windows_num, :doors_num, :how_soon, :quotes_num, :hear_about_us, :homeoweners_at_home, :supply_install, :financing, :installer_id)
+      params.require(:appointment).permit(:booking_by, :app_type, :sealed, :followup_time, :new_customer_first_name, :new_customer_last_name, :new_customer_phone, :new_customer_home_phone, :new_customer_email, :status, :is_new_customer, :schedule_time, :end_time, :comments, :seller_id, :customer_id, :address, :city, :province, :postal_code, :windows_num, :doors_num, :how_soon, :quotes_num, :hear_about_us, :homeoweners_at_home, :supply_install, :financing, :installer_id)
     end
 end

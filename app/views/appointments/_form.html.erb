@@ -11,13 +11,46 @@
         </div>
       <% end %>
 
-      <%= f.hidden_field :schedule_time, value: appointment.schedule_time.to_formatted_s(:db) %>
-      <%= f.hidden_field :end_time, value: appointment.end_time.to_formatted_s(:db) %>
+      <%= f.hidden_field :customer_id, value: appointment.customer_id, id: :customer_id %>
 
       <div class="form-group">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12">Schedule time</label>
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">Schedule Date</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
-            <input type="text" class='form-control' value="<%= appointment.schedule_time.to_formatted_s(:short) %> - <%= appointment.end_time.to_formatted_s(:short) %>" disabled="disabled">
+            <%= f.hidden_field :schedule_time, value: appointment.schedule_time.to_formatted_s(:db), id: 'corrected_date' %>
+            <%= f.hidden_field :end_time, value: appointment.end_time.to_formatted_s(:db), id: 'end_time' %>
+            <input type="text" class="datepicker form-control has-feedback-left" value="<%= appointment.schedule_time.strftime("%m/%d/%Y") %>" required />
+            <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+          </div>
+      </div>
+
+      <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">Time Frame</label>
+          <div class="col-md-9 col-sm-9 col-xs-12" id="time-frame-select">
+            <select id="schedule_time_select" class="form-control" onchange="this.options[this.selectedIndex].value && (select_appointment_time_frame(this.options[this.selectedIndex].value));">
+              <% @bookings.each do |item| %>
+              <% if item[:schedule_time].strftime("%H").to_i == 9 %>
+              <option value="09:00:00" <% if appointment.schedule_time.strftime("%H").to_i == 9 %>selected="true"<% end %>>9am-10am (<%= item[:available]%> bookings available)</option>
+              <% end %>
+              <% if item[:schedule_time].strftime("%H").to_i == 10 %>
+              <option value="10:00:00" <% if appointment.schedule_time.strftime("%H").to_i == 10 %>selected="true"<% end %>>10am-12am (<%= item[:available]%> bookings available)</option>
+              <% end %>
+              <% if item[:schedule_time].strftime("%H").to_i == 12 %>
+              <option value="12:00:00" <% if appointment.schedule_time.strftime("%H").to_i == 12 %>selected="true"<% end %>>12pm-2pm (<%= item[:available]%> bookings available)</option>
+              <% end %>
+              <% if item[:schedule_time].strftime("%H").to_i == 14 %>
+              <option value="14:00:00" <% if appointment.schedule_time.strftime("%H").to_i == 14 %>selected="true"<% end %>>2pm-4pm (<%= item[:available]%> bookings available)</option>
+              <% end %>
+              <% if item[:schedule_time].strftime("%H").to_i == 16 %>
+              <option value="16:00:00" <% if appointment.schedule_time.strftime("%H").to_i == 16 %>selected="true"<% end %>>4pm-6pm (<%= item[:available]%> bookings available)</option>
+              <% end %>
+              <% if item[:schedule_time].strftime("%H").to_i == 18 %>
+              <option value="18:00:00" <% if appointment.schedule_time.strftime("%H").to_i == 18 %>selected="true"<% end %>>6pm-8pm (<%= item[:available]%> bookings available)</option>
+              <% end %>
+              <% if item[:schedule_time].strftime("%H").to_i == 20 %>
+              <option value="20:00:00" <% if appointment.schedule_time.strftime("%H").to_i == 20 %>selected="true"<% end %>>8pm-9pm (<%= item[:available]%> bookings available)</option>
+              <% end %>
+              <% end %>
+            </select>
           </div>
       </div>
 
@@ -35,6 +68,7 @@
           </div>
       </div>
 
+      <% if edit_mode == false %>
       <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Is new Customer</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
@@ -46,15 +80,7 @@
             
           </div>
       </div>
-
-      
-
-      <div class="form-group" id="existing_customer" style="display:none;">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12">Customer</label>
-          <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.select :customer_id, options_for_select(@customers.map{ |c| [c.full_name, c.id] }), {:include_blank => 'None Specified'}, { class: 'form-control' } %>
-          </div>
-      </div>
+      <% end %>
 
 
       <div class="form-group">
@@ -63,7 +89,7 @@
           <% if current_user.role == 'telemarketer' %>
             <%= f.select :status, options_for_select({telemarketing: :Telemarketing }.values, :telemarketing), {}, { class: 'form-control' } %>
           <% else %>
-            <%= f.select :status, options_for_select({lead: :Lead, reschedule: :Reschedule, upSell: :UpSell, referral: :Referral, telemarketing: :Telemarketing }.values, :lead), {}, { class: 'form-control' } %>
+            <%= f.select :status, options_for_select({lead: :Lead, reschedule: :Reschedule, upSell: :UpSell, referral: :Referral, telemarketing: :Telemarketing, assigned: :Assigned }.values, default_type), {}, { class: 'form-control' } %>
           <% end %>
           </div>
       </div>
@@ -73,17 +99,33 @@
       <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Project Manager</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.select :seller_id, options_for_select(@sellers.map{ |c| [c.full_name, c.id] }), {:include_blank => 'None Specified'}, { class: 'form-control' } %>
+            <%= f.select :seller_id, options_for_select(sellers.map{ |c| [c.full_name, c.id] }), {:include_blank => 'None Specified'}, { class: 'form-control' } %>
           </div>
       </div>
       <% end %>
 
 
+      <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Cell Phone</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <%= f.text_field :new_customer_phone, :class => 'form-control  has-feedback-left cell-phone', :placeholder => '777-777-7777', disabled: edit_mode %>
+              <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Home Phone</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <%= f.text_field :new_customer_home_phone, :class => 'form-control  has-feedback-left home-phone', :placeholder => '777-777-7777', disabled: edit_mode %>
+              <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+            </div>
+        </div>
+
       <div id="new_customer">
         <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">First Name</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
-              <%= f.text_field :new_customer_first_name, :class => 'form-control has-feedback-left', :placeholder => 'First Name' %>
+              <%= f.text_field :new_customer_first_name, :class => 'form-control has-feedback-left first_name', :placeholder => 'First Name', disabled: edit_mode %>
               <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
             </div>
         </div>
@@ -91,23 +133,15 @@
         <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Last Name</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
-              <%= f.text_field :new_customer_last_name, :class => 'form-control  has-feedback-left', :placeholder => 'Last Name' %>
+              <%= f.text_field :new_customer_last_name, :class => 'form-control  has-feedback-left last_name', :placeholder => 'Last Name', disabled: edit_mode %>
               <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone</label>
-            <div class="col-md-9 col-sm-9 col-xs-12">
-              <%= f.text_field :new_customer_phone, :class => 'form-control  has-feedback-left', :placeholder => 'Phone' %>
-              <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Email</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
-              <%= f.text_field :new_customer_email, :class => 'form-control has-feedback-left', :placeholder => 'Email' %>
+              <%= f.text_field :new_customer_email, :class => 'form-control has-feedback-left email', :placeholder => 'Email', disabled: edit_mode %>
               <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
             </div>
         </div>
@@ -119,42 +153,58 @@
       <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Address</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.text_field :address, :class => 'form-control' %>
+            <%= f.text_field :address, :class => 'form-control address' %>
           </div>
       </div>
 
       <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">City</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.text_field :city, :class => 'form-control' %>
+            <%= f.text_field :city, :class => 'form-control city' %>
           </div>
       </div>
 
       <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Provice</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.select :province, {AB: :AB, BC: :BC, MB: :MB, NB: :NB, NL: :NL, NS: :NS, NT: :NT, NU: :NU, ON: :ON, PE: :PE, QC: :QC, SK: :SK, YT: :YT}, {}, {:class => 'form-control'} %>
+            <%= f.select :province, {AB: :AB, BC: :BC, MB: :MB, NB: :NB, NL: :NL, NS: :NS, NT: :NT, NU: :NU, ON: :ON, PE: :PE, QC: :QC, SK: :SK, YT: :YT}, {}, {:class => 'form-control province'} %>
           </div>
       </div>
 
       <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Postal Code</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.text_field :postal_code, :class => 'form-control' %>
+            <%= f.text_field :postal_code, :class => 'form-control postal' %>
           </div>
       </div>
 
       <div class="form-group">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12">Number of windows</label>
+        <label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
+        <div id="gmap" class="col-md-9 col-sm-9 col-xs-12">
+            <% if edit_mode == true && appointment.postal_code != '' %>
+            <iframe src="http://maps.google.com/maps?q=<%=u appointment.postal_code %>&output=embed" style="border:none;width:100%;height:250px;" class="form-control"></iframe>
+            <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">Number of windows to replace</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
             <%= f.number_field :windows_num, :class => 'form-control' %>
           </div>
       </div>
 
       <div class="form-group">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12">Number of doors</label>
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">Number of doors to replace</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
             <%= f.number_field :doors_num, :class => 'form-control' %>
+          </div>
+      </div>
+
+      <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">Number of sealed units to replace</label>
+          <div class="col-md-9 col-sm-9 col-xs-12">
+            <%= f.number_field :sealed, :class => 'form-control' %>
           </div>
       </div>
 
@@ -166,27 +216,26 @@
       </div>
 
       <div class="form-group">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12">How many quotes they collect</label>
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">How many quotes you collect?</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
             <%= f.text_field :quotes_num, :class => 'form-control' %>
           </div>
       </div>
 
       <div class="form-group">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12">How did you hear about us</label>
-          <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.text_field :hear_about_us, :class => 'form-control' %>
-          </div>
-      </div>
-
-      
-
-      <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Do you need financing</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.text_field :financing, :class => 'form-control' %>
+            <%= f.select :financing, { "yes" => "yes", "no" => "no" }, {}, {:class => 'form-control'} %>
           </div>
       </div>
+
+      <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">How did you hear about us</label>
+          <div class="col-md-9 col-sm-9 col-xs-12">
+            <%= f.select :hear_about_us, { "Flyer" => "Flyer", "Google" => "Google", "Internet other" => "Internet other", "Telemarketing" => "Telemarketing", "Radio" => "Radio", "Refferal" => "Refferal", "World of month" => "World of month", "Neighboor" => "Neighboor", "Relative" => "Relative", "Other" => "Other" }, {}, {:class => 'form-control'} %>
+          </div>
+      </div>
+     
 
       <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Comments</label>
@@ -196,25 +245,91 @@
       </div>
 
       <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">Booking done by</label>
+          <div class="col-md-9 col-sm-9 col-xs-12">
+            <%= f.text_field :booking_by, :class => 'form-control', disabled: true %>
+          </div>
+      </div>
+
+      <% if current_user.role == 'telemarketer' %>
+        <%= f.hidden_field :app_type, value: default_status %>
+      <% else %>
+      <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">Appointment Status</label>
+          <div class="col-md-9 col-sm-9 col-xs-12">
+            <%= f.select :app_type, options_for_select({ confirmed: :Confirmed, unconfirmed: :Unconfirmed }.values, default_status), {}, { class: 'form-control' } %>
+          </div>
+      </div>
+      <% end %>
+
+
+      <div class="form-group">
         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
           <%= link_to 'Cancel', :back, :class => 'btn btn-primary' %>
-          <%= f.submit 'Save', :class => 'btn btn-success' %>
+          <%= f.submit 'Save', :class => 'btn btn-success submit' %>
         </div>
       </div>
     <% end %>
 
     <script>
+      function find_customer(phone) {
+        return $.ajax({
+            url: '/customers/find/'+phone,
+            type: 'GET'
+          });
+      }
+
       $(document).ready(function() {
+        $('.postal').focusout(function(){
+          var postal = $('.postal').val();
+          if (postal != '') {
+            $('#gmap').html('<iframe src="http://maps.google.com/maps?q='+encodeURIComponent(postal)+'&output=embed" style="border:none;width:100%;height:250px;" class="form-control"></iframe>');
+          }
+        });
+        
+        $('.cell-phone').focusout(function(){
+          find_customer($('.cell-phone').val()).done(function(data){    
+              $('.home-phone').val(data.customer.home_phone);
+              $('.first_name').val(data.customer.first_name);
+              $('.last_name').val(data.customer.last_name);
+              $('.email').val(data.customer.email);
+
+              if (data.appointmet != null || data.appointmet != 'null') {
+                $('.address').val(data.appointment.address);
+                $('.city').val(data.appointment.city);
+                $('.postal').val(data.appointment.postal_code);
+                $('.province option[value="'+data.appointment.province+'"]').attr('selected', true);
+              }
+
+              // this is existing customer 
+              $('#customer_id').val(data.customer.id);
+              $('#appointment_is_new_customer_1').prop('checked', false);
+              $('#appointment_is_new_customer_0').prop('checked', true);
+          });     
+          find_customer($('.cell-phone').val()).fail(function(data){
+              // not found
+              $('#customer_id').val('');
+              $('#appointment_is_new_customer_1').prop('checked', true);
+              $('#appointment_is_new_customer_0').prop('checked', false);
+              $('.home-phone').val('');
+              $('.first_name').val('');
+              $('.last_name').val('');
+              $('.email').val('');
+              $('.address').val('');
+              $('.city').val('');
+              $('.postal').val('');
+          });   
+        });
 
         $('input[type=radio][name="appointment[is_new_customer]"]').change(function() {
-            if (this.value == 1) {
-              $('#existing_customer').hide();
-              $('#new_customer').show();
-            }
-            else if (this.value == 0) {
-              $('#existing_customer').show();
-              $('#new_customer').hide();     
-            }
+            //if (this.value == 1) {
+            //  $('#existing_customer').hide();
+            //  $('#new_customer').show();
+            // }
+            //else if (this.value == 0) {
+            //  $('#existing_customer').show();
+            //  $('#new_customer').hide();     
+            // }
         });
       });
     </script>

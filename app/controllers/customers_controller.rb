@@ -61,6 +61,18 @@ class CustomersController < ApplicationController
     end
   end
 
+  def find_by_phone
+    customer = Customer.where('phone = ?', params[:phone]).first
+    unless customer.nil?
+      appointment = Appointment.where('customer_id = ?', customer.id).order('id DESC').first
+      render json: { customer: customer, appointment: appointment }, status: 200
+    else
+      render json: 'not found', status: 404  
+    end
+    
+  end
+  
+
   # DELETE /customers/1
   # DELETE /customers/1.json
   def destroy

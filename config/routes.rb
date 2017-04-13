@@ -28,6 +28,8 @@ Rails.application.routes.draw do
   get 'logs', to: 'logs#index'
   get 'appointments/new/:unixtime', to: 'appointments#new'
   get 'appointments/date/:date', to: 'appointments#index'
+  get 'customers/find/:phone', to: 'customers#find_by_phone'
+  get 'bookings/available/:date', to: 'appointments#bookings'
   patch 'users/update_password/:id', to: 'users#update_password', as: 'update_password'
   patch 'users/activate/:id', to: 'users#activate', as: 'user_activate'
 

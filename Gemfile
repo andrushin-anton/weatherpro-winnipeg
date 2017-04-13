@@ -20,7 +20,7 @@ gem 'coffee-rails', '~> 4.2'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
-gem 'on_change'
+# gem 'on_change'
 
 # Pagination
 gem 'kaminari', :git => "git://github.com/amatsuda/kaminari.git", :branch => 'master'
