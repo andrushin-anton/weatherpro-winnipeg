@@ -41,12 +41,12 @@ class Appointment < ApplicationRecord
                 if sellers_ids.length > 0
                     self.joins(:customer).where(
                         'appointments.status != ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ? OR seller_id IN(?))', 
-                        "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{sellers_ids.join(",")}"
+                        "#{self.statuses[:FollowUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{sellers_ids.join(",")}"
                     ).order('id DESC').all
                 else
                     self.joins(:customer).where(
                         'appointments.status != ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?)', 
-                        "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%"
+                        "#{self.statuses[:FollowUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%"
                     ).order('id DESC').all
                 end
 
@@ -54,21 +54,21 @@ class Appointment < ApplicationRecord
             elsif user.role == 'telemarketer'
                 self.joins(:customer).where(
                     'schedule_time >= ? AND appointments.status = ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?)', 
-                    Date.today, "#{self.statuses[:telemarketing]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%"
+                    Date.today, "#{self.statuses[:Telemarketing]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%"
                 ).order('id DESC').all
 
             #Sellers only
             elsif user.role == 'seller'
                 self.where(
                     'status != ? AND (address LIKE ? OR city LIKE ?) AND seller_id = ?', 
-                    "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", user.id
+                    "#{self.statuses[:FollowUp]}", "%#{search}%", "%#{search}%", user.id
                 ).order('id DESC').all
 
             #Installers
             else
                 self.where(
                     'status != ? AND (address LIKE ? OR city LIKE ?) AND installer_id = ?', 
-                    "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", user.id
+                    "#{self.statuses[:FollowUp]}", "%#{search}%", "%#{search}%", user.id
                     ).order('id DESC').all
             end                
 
@@ -76,22 +76,22 @@ class Appointment < ApplicationRecord
             if user.role == 'admin' || user.role == 'manager' || user.role == 'master'
                 self.where(
                     'status != ? AND schedule_time >= ? AND schedule_time < ?',
-                    "#{self.statuses[:followUp]}", start_time, end_time
+                    "#{self.statuses[:FollowUp]}", start_time, end_time
                 ).order('id DESC').all
             elsif user.role == 'telemarketer'
                 self.where(
                     'status = ? AND schedule_time >= ? AND schedule_time < ?', 
-                    "#{self.statuses[:telemarketing]}", start_time, end_time
+                    "#{self.statuses[:Telemarketing]}", start_time, end_time
                 ).order('id DESC').all
             elsif user.role == 'seller'
                 self.where(
                     'status != ? AND schedule_time >= ? AND schedule_time < ? AND seller_id = ?', 
-                    "#{self.statuses[:followUp]}", start_time, end_time, user.id
+                    "#{self.statuses[:FollowUp]}", start_time, end_time, user.id
                 ).order('id DESC').all
             else
                 self.where(
                     'status != ? AND schedule_time >= ? AND schedule_time < ? AND installer_id = ?', 
-                    "#{self.statuses[:followUp]}", start_time, end_time, user.id
+                    "#{self.statuses[:FollowUp]}", start_time, end_time, user.id
                 ).order('id DESC').all
             end
         end
@@ -105,25 +105,25 @@ class Appointment < ApplicationRecord
                 if sellers_ids.length > 0
                     self.joins(:customer).where(
                         'appointments.status = ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ? OR seller_id IN(?))', 
-                        "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{sellers_ids.join(",")}"
+                        "#{self.statuses[:FollowUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{sellers_ids.join(",")}"
                     ).order('id DESC').all
                 else
                     self.joins(:customer).where(
                         'appointments.status = ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?)', 
-                        "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%"
+                        "#{self.statuses[:FollowUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%"
                     ).order('id DESC').all
                 end
                 
             elsif user.role == 'seller'
                 self.where(
                     'status = ? AND (address LIKE ? OR city LIKE ?) AND seller_id = ?', 
-                    "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", user.id
+                    "#{self.statuses[:FollowUp]}", "%#{search}%", "%#{search}%", user.id
                 ).order('id DESC').all
 
             elsif user.role == 'installer'
                 self.where(
                     'status = ? AND (address LIKE ? OR city LIKE ?) AND installer_id = ?', 
-                    "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", user.id
+                    "#{self.statuses[:FollowUp]}", "%#{search}%", "%#{search}%", user.id
                 ).order('id DESC').all
 
             else
@@ -131,11 +131,11 @@ class Appointment < ApplicationRecord
             end                
         else
             if user.role == 'admin' || user.role == 'manager' || user.role == 'master' 
-                self.where('status = ? AND followup_time >= ? AND followup_time < ?', "#{self.statuses[:followUp]}", start_time, end_time).order('id DESC').all
+                self.where('status = ? AND followup_time >= ? AND followup_time < ?', "#{self.statuses[:FollowUp]}", start_time, end_time).order('id DESC').all
             elsif user.role == 'seller'
-                self.where('status = ? AND followup_time >= ? AND followup_time < ? AND seller_id = ?', "#{self.statuses[:followUp]}", start_time, end_time, user.id).order('id DESC').all
+                self.where('status = ? AND followup_time >= ? AND followup_time < ? AND seller_id = ?', "#{self.statuses[:FollowUp]}", start_time, end_time, user.id).order('id DESC').all
             elsif user.role == 'installer'
-                self.where('status = ? AND followup_time >= ? AND followup_time < ? AND installer_id = ?', "#{self.statuses[:followUp]}", start_time, end_time, user.id).order('id DESC').all
+                self.where('status = ? AND followup_time >= ? AND followup_time < ? AND installer_id = ?', "#{self.statuses[:FollowUp]}", start_time, end_time, user.id).order('id DESC').all
             else
                 return []
             end
@@ -147,12 +147,12 @@ class Appointment < ApplicationRecord
         if search    
             self.joins(:customer).where(
                 'appointments.status != ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?) AND seller_id = ?',
-                "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{seller_id}"
+                "#{self.statuses[:FollowUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{seller_id}"
             ).order('id DESC').all           
         else
             self.where(
                 'status != ? AND schedule_time >= ? AND schedule_time < ? AND seller_id = ?',
-                "#{self.statuses[:followUp]}", start_time, end_time, seller_id
+                "#{self.statuses[:FollowUp]}", start_time, end_time, seller_id
             ).order('id DESC').all
         end
     end
@@ -161,12 +161,12 @@ class Appointment < ApplicationRecord
         if search    
             self.joins(:customer).where(
                 'appointments.status = ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?) AND seller_id = ?',
-                "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{seller_id}"
+                "#{self.statuses[:FollowUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{seller_id}"
             ).order('id DESC').all           
         else
             self.where(
                 'status = ? AND followup_time >= ? AND followup_time < ? AND seller_id = ?',
-                "#{self.statuses[:followUp]}", start_time, end_time, seller_id
+                "#{self.statuses[:FollowUp]}", start_time, end_time, seller_id
             ).order('id DESC').all
         end
     end
@@ -176,12 +176,12 @@ class Appointment < ApplicationRecord
         if search    
             self.joins(:customer).where(
                 'appointments.status != ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?) AND installer_id = ?',
-                "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{installer_id}"
+                "#{self.statuses[:FollowUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{installer_id}"
             ).order('id DESC').all           
         else
             self.where(
                 'status != ? AND schedule_time >= ? AND schedule_time < ? AND installer_id = ?',
-                "#{self.statuses[:followUp]}", start_time, end_time, installer_id
+                "#{self.statuses[:FollowUp]}", start_time, end_time, installer_id
             ).order('id DESC').all
         end
     end
@@ -190,12 +190,12 @@ class Appointment < ApplicationRecord
         if search    
             self.joins(:customer).where(
                 'appointments.status = ? AND (address LIKE ? OR city LIKE ? OR customers.first_name LIKE ? OR customers.last_name LIKE ?) AND installer_id = ?',
-                "#{self.statuses[:followUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{installer_id}"
+                "#{self.statuses[:FollowUp]}", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "#{installer_id}"
             ).order('id DESC').all           
         else
             self.where(
                 'status = ? AND followup_time >= ? AND followup_time < ? AND installer_id = ?',
-                "#{self.statuses[:followUp]}", start_time, end_time, installer_id
+                "#{self.statuses[:FollowUp]}", start_time, end_time, installer_id
             ).order('id DESC').all
         end
     end
