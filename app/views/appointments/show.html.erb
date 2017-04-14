@@ -291,35 +291,35 @@
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Amount of total order</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <%= f.number_field :sold_amount, :class => 'form-control money', required: 'true' %>
+                              <%= f.number_field :sold_amount, :class => 'form-control money', :step => "0.01", required: 'true' %>
                             </div>
                           </div>
 
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Energy Surcharge</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <%= f.number_field :sold_energy_charge, :class => 'form-control money' %>
+                              <%= f.number_field :sold_energy_charge, :class => 'form-control money', :step => "0.01" %>
                             </div>
                           </div>
 
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">GST</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <%= f.number_field :sold_gst, :class => 'form-control money' %>
+                              <%= f.number_field :sold_gst, :class => 'form-control money', :step => "0.01" %>
                             </div>
                           </div>
 
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Credit Card Charge</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <%= f.number_field :sold_credit_card, :class => 'form-control money' %>
+                              <%= f.number_field :sold_credit_card, :class => 'form-control money', :step => "0.01" %>
                             </div>
                           </div>
 
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Total</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <%= f.number_field :sold_total, :class => 'form-control money', required: 'true' %>
+                              <%= f.number_field :sold_total, :class => 'form-control money', :step => "0.01", required: 'true' %>
                             </div>
                           </div>
 
@@ -340,21 +340,21 @@
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Extra</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <%= f.number_field :sold_extra, :class => 'form-control money' %>
+                              <%= f.number_field :sold_extra, :class => 'form-control money', :step => "0.01" %>
                             </div>
                           </div>
 
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <%= f.number_field :sold_discount, :class => 'form-control money' %>
+                              <%= f.number_field :sold_discount, :class => 'form-control money', :step => "0.01" %>
                             </div>
                           </div>
 
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Amount of total order on completion</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <%= f.number_field :sold_amount_of_total, :class => 'form-control money' %>
+                              <%= f.number_field :sold_amount_of_total, :class => 'form-control money', :step => "0.01" %>
                             </div>
                           </div>
                           
@@ -362,7 +362,7 @@
                           <div class="form-group">
                             <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                               <button class="btn btn-primary" type="reset">Reset</button>
-                              <%= f.submit 'Save as Sold', :class => 'btn btn-success', id: 'submit-sold', disabled: 'true' %>
+                              <%= f.submit 'Save as Sold', :class => 'btn btn-success', id: 'submit-sold' %>
                             </div>
                           </div>
                         <% end %>             
