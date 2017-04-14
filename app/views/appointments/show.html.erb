@@ -4,21 +4,52 @@
       <div class="clearfix"></div>
     </div>
     <div class="x_content">
+
+        <p>
+          <strong>Schedule Date:</strong>
+          <%= @appointment.schedule_time.strftime("%m/%d/%Y") %>
+        </p>
+
+        <p>
+          <strong>Time Frame:</strong>
+          <%= @appointment.get_time_frame %>
+        </p>
     
         <p>
-          <strong>Status:</strong>
+          <strong>Appointment Type:</strong>
           <%= @appointment.status %>
         </p>
 
         <p>
-          <strong>Customer:</strong>
-          <%= @appointment.customer.full_name %>
+          <strong>Appointment Status:</strong>
+          <%= @appointment.app_type %>
         </p>
 
         <p>
-          <strong>Schedule time:</strong>
-          <%= @appointment.schedule_time.to_formatted_s(:short) %>
+          <strong>Customer first name:</strong>
+          <%= @appointment.customer.first_name %>
         </p>
+
+        <p>
+          <strong>Customer last name:</strong>
+          <%= @appointment.customer.last_name %>
+        </p>
+
+        <p>
+          <strong>Cell phone:</strong>
+          <%= @appointment.customer.phone %>
+        </p>
+
+        <p>
+          <strong>Home phone:</strong>
+          <%= @appointment.customer.home_phone %>
+        </p>
+
+        <p>
+          <strong>Email:</strong>
+          <%= @appointment.customer.email %>
+        </p>
+        
         
         <p>
           <strong>Address:</strong>
@@ -51,6 +82,11 @@
         </p>
 
         <p>
+          <strong>Number of sealed units to replace:</strong>
+          <%= @appointment.sealed %>
+        </p>
+
+        <p>
           <strong>How soon to replace:</strong>
           <%= @appointment.how_soon %>
         </p>
@@ -58,6 +94,11 @@
         <p>
           <strong>How many quotes they collect:</strong>
           <%= @appointment.quotes_num %>
+        </p>
+
+        <p>
+          <strong>Do you need financing:</strong>
+          <%= @appointment.financing %>
         </p>
 
         <p>
@@ -76,20 +117,12 @@
         </p>
 
         <p>
-          <strong>Do you need financing:</strong>
-          <%= @appointment.financing %>
-        </p>
-
-        <p>
-          <strong>Comments:</strong>
-          <%= @appointment.comments %>
-        </p>
-        <p>
           <strong>Attachments:</strong><br>
           <% @appointment.attachments.each do |file| %>
           <a target="_blank" href="<%= file.file_url %>"><%= file.file_name %></a><br>
           <% end %>
         </p>
+
         <div id="uploads_container"></div>
         <script id="template-upload" type="text/x-tmpl">
           <div id="upload_{%=o.unique_id%}" class="upload">
@@ -99,6 +132,22 @@
             </div>
           </div>
         </script>
+        <br>
+        <%= form_for @appointment, :html => {:class => 'form-horizontal form-label-left input_mask'} do |f| %>
+        <div class="ln_solid"></div>
+        <div class="form-group">
+          <div class="col-md-9 col-sm-9 col-xs-12">
+            <%= f.text_area :comments, :class => 'form-control', :rows => 10, :html => {:style => 'z-index: auto; position: relative; line-height: 20px; font-size: 14px; transition: none; background: transparent !important;'} %>
+          </div>
+        </div>
+        <div class="ln_solid"></div>
+        <div class="form-group">
+          <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+            <%= f.submit 'Save Comments!', :class => 'btn btn-success' %>
+          </div>
+        </div>
+        <% end %>
+
   </div>
 
   </div>
@@ -122,38 +171,82 @@
                           <select class="form-control" onchange="this.options[this.selectedIndex].value && (select_seller_option(this.options[this.selectedIndex].value));">
                             <option value="none">Choose option</option>
                             <option value="followup">FollowUp</option>
+                            <option value="reschedule">Reschedule</option>
                             <option value="sold">Sold</option>
                             <option value="canceled">Cancel</option>
                           </select>
                         </div>
                       </div>
 
+                      <!-- Reschedule -->
+                      <div id="reschedule-seller-action-form" style="display:none;" class="seller-action-form">
+                        <%= form_for @appointment, :html => {:class => 'form-horizontal form-label-left input_mask'} do |f| %>
+                    
+                          <%= f.hidden_field :status, value: Appointment.statuses[:Reschedule] %>
+      
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Choose date</label>
+                            <div class="col-md-9 xdisplay_inputx form-group has-feedback">
+                              <% if @appointment.reschedule_time.nil? || @appointment.reschedule_time == '' %>
+                              <%= f.hidden_field :reschedule_time, value: @appointment.schedule_time.to_formatted_s(:db), id: 'corrected_date' %>
+                              <input type="text" class="form-control has-feedback-left datepicker-seller" value="<%= Date.today.strftime("%m/%d/%Y") %>" required />
+                              <% else %>
+                              <%= f.hidden_field :reschedule_time, value: @appointment.reschedule_time.to_formatted_s(:db), id: 'corrected_date' %>
+                              <input type="text" class="form-control has-feedback-left datepicker-seller" value="<%= @appointment.reschedule_time.strftime("%m/%d/%Y") %>" required />
+                              <% end %>
+                              <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                          </div>
+                      
+
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Reason for reschedule</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <%= f.text_field :reschedule_reason, :class => 'form-control', required: 'true' %>
+                            </div>
+                          </div>
+                          
+                          <div class="ln_solid"></div>
+                          <div class="form-group">
+                            <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                              <button class="btn btn-primary" type="reset">Reset</button>
+                              <%= f.submit 'Save as Reschedule', :class => 'btn btn-success' %>
+                            </div>
+                          </div>
+                        <% end %>           
+                      </div>
+                      <!-- End Reschedule -->
+
                       <!-- FollowUp -->
                       <div id="followup-seller-action-form" style="display:none;" class="seller-action-form">
                         <%= form_for @appointment, :html => {:class => 'form-horizontal form-label-left input_mask'} do |f| %>
                     
-                          <%= f.hidden_field :status, value: Appointment.statuses[:followUp] %>
+                          <%= f.hidden_field :status, value: Appointment.statuses[:FollowUp] %>
       
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Choose date</label>
                             <div class="col-md-9 xdisplay_inputx form-group has-feedback">
                               <%= f.hidden_field :followup_time, value: @appointment.schedule_time.to_formatted_s(:db), id: 'corrected_date' %>
+                              <% if @appointment.followup_time.nil? || @appointment.followup_time == '' %>
                               <input type="text" class="form-control has-feedback-left datepicker-seller" value="<%= Date.today.strftime("%m/%d/%Y") %>" required />
+                              <% else %>
+                              <input type="text" class="form-control has-feedback-left datepicker-seller" value="<%= @appointment.followup_time.strftime("%m/%d/%Y") %>" required />
+                              <% end %>
                               <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                             </div>
                           </div>
                           
                           <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">FollowUp Question 1</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Time Frame</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control" placeholder="Default Input" required>
+                              <%= f.select :followup_timeframe, options_for_select({ '9am-10am' => '9am-10am', '10am-12am' => '10am-12am', '12pm-2pm' => '12pm-2pm', '2pm-4pm' => '2pm-4pm', '4pm-6pm' => '4pm-6pm', '6pm-8pm' => '6pm-8pm', '8pm-9pm' => '8pm-9pm' }.values, @appointment.followup_timeframe), {}, { class: 'form-control' } %>
                             </div>
                           </div>
 
                           <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">FollowUp Question 2</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Comments</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control" placeholder="Default Input" required>
+                              <%= f.text_field :followup_comments, :class => 'form-control' %>
                             </div>
                           </div>
                           
@@ -186,18 +279,82 @@
                           </div>
                         <% end %>
                         <%= form_for @appointment, :html => {:class => 'form-horizontal form-label-left input_mask'} do |f| %>
-                          <%= f.hidden_field :status, value: Appointment.statuses[:sold] %>
+                          <%= f.hidden_field :status, value: Appointment.statuses[:Sold] %>
+
                           <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Sold Question 1</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">SNAP Financing</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control" placeholder="Default Input" required>
+                              <%= f.select :sold_snap, options_for_select({ 'yes' => 'yes', 'no' => 'no' }.values, @appointment.sold_snap), {}, { class: 'form-control' } %>
+                            </div>
+                          </div>
+                          
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Amount of total order</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <%= f.number_field :sold_amount, :class => 'form-control money', required: 'true' %>
                             </div>
                           </div>
 
                           <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Sold Question 2</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Energy Surcharge</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control" placeholder="Default Input" required>
+                              <%= f.number_field :sold_energy_charge, :class => 'form-control money' %>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">GST</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <%= f.number_field :sold_gst, :class => 'form-control money' %>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Credit Card Charge</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <%= f.number_field :sold_credit_card, :class => 'form-control money' %>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Total</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <%= f.number_field :sold_total, :class => 'form-control money', required: 'true' %>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Due on delivery</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <% if @appointment.sold_due_on_delivery.nil? || @appointment.sold_due_on_delivery == '' %>
+                              <%= f.hidden_field :sold_due_on_delivery, value: Date.today.to_formatted_s(:db), id: 'delivery_corrected_date' %>
+                              <input type="text" class="form-control has-feedback-left datepicker-delivery" value="<%= Date.today.strftime("%m/%d/%Y") %>" required />
+                              <% else %>
+                              <%= f.hidden_field :sold_due_on_delivery, value: @appointment.reschedule_time.to_formatted_s(:db), id: 'delivery_corrected_date' %>
+                              <input type="text" class="form-control has-feedback-left datepicker-delivery" value="<%= @appointment.sold_due_on_delivery.strftime("%m/%d/%Y") %>" required />
+                              <% end %>
+                              <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Extra</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <%= f.number_field :sold_extra, :class => 'form-control money' %>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <%= f.number_field :sold_discount, :class => 'form-control money' %>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Amount of total order on completion</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <%= f.number_field :sold_amount_of_total, :class => 'form-control money' %>
                             </div>
                           </div>
                           
@@ -215,18 +372,12 @@
                       <!-- Canceled -->
                       <div id="canceled-seller-action-form" style="display:none;" class="seller-action-form">
                         <%= form_for @appointment, :html => {:class => 'form-horizontal form-label-left input_mask'} do |f| %>
-                          <%= f.hidden_field :status, value: Appointment.statuses[:cancelled] %>
-                          <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Cancelled Question 1</label>
-                            <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control" placeholder="Default Input" required>
-                            </div>
-                          </div>
+                          <%= f.hidden_field :status, value: Appointment.statuses[:Cancelled] %>
 
                           <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Cancelled Question 2</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Reason for cancel</label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control" placeholder="Default Input" required>
+                              <%= f.text_field :cancel_reason, :class => 'form-control', required: 'true' %>
                             </div>
                           </div>
                           

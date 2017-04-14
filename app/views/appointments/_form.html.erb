@@ -87,9 +87,9 @@
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Appointment Type</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
           <% if current_user.role == 'telemarketer' %>
-            <%= f.select :status, options_for_select({telemarketing: :Telemarketing }.values, :telemarketing), {}, { class: 'form-control' } %>
+            <%= f.select :status, options_for_select({Telemarketing: :Telemarketing }.values, :Telemarketing), {}, { class: 'form-control' } %>
           <% else %>
-            <%= f.select :status, options_for_select({lead: :Lead, reschedule: :Reschedule, upSell: :UpSell, referral: :Referral, telemarketing: :Telemarketing, assigned: :Assigned }.values, default_type), {}, { class: 'form-control' } %>
+            <%= f.select :status, options_for_select({Lead: :Lead, Reschedule: :Reschedule, UpSell: :UpSell, Referral: :Referral, Telemarketing: :Telemarketing, Assigned: :Assigned, Cancelled: :Cancelled, Sold: :Sold, FollowUp: :FollowUp }.values, default_type), {}, { class: 'form-control' } %>
           <% end %>
           </div>
       </div>
@@ -99,7 +99,7 @@
       <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12">Project Manager</label>
           <div class="col-md-9 col-sm-9 col-xs-12">
-            <%= f.select :seller_id, options_for_select(sellers.map{ |c| [c.full_name, c.id] }), {:include_blank => 'None Specified'}, { class: 'form-control' } %>
+            <%= f.select :seller_id, options_for_select(sellers.map{ |c| [c.full_name, c.id] }, appointment.seller_id), {:include_blank => 'None Specified'}, { class: 'form-control' } %>
           </div>
       </div>
       <% end %>
@@ -260,6 +260,56 @@
             <%= f.select :app_type, options_for_select({ confirmed: :Confirmed, unconfirmed: :Unconfirmed }.values, default_status), {}, { class: 'form-control' } %>
           </div>
       </div>
+      <% end %>
+
+      <% if edit_mode %>
+      <% if appointment.status == 'Cancelled' %>
+      <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12">Reason for cancel</label>
+          <div class="col-md-9 col-sm-9 col-xs-12">
+            <%= f.text_field :cancel_reason, :class => 'form-control' %>
+          </div>
+      </div>
+      <% end %>
+      <% if appointment.status == 'FollowUp' %>
+      <div class="form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">FollowUp date</label>
+        <div class="col-md-9 xdisplay_inputx form-group has-feedback">
+          <%= f.hidden_field :followup_time, value: @appointment.followup_time.to_formatted_s(:db), id: 'followup_corrected_date' %>
+          <input type="text" class="form-control has-feedback-left datepicker-followup" value="<%= appointment.followup_time.strftime("%m/%d/%Y") %>" required />
+          <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">FollowUp Time Frame</label>
+        <div class="col-md-9 col-sm-9 col-xs-12">
+          <%= f.select :followup_timeframe, options_for_select({ '9am-10am' => '9am-10am', '10am-12am' => '10am-12am', '12pm-2pm' => '12pm-2pm', '2pm-4pm' => '2pm-4pm', '4pm-6pm' => '4pm-6pm', '6pm-8pm' => '6pm-8pm', '8pm-9pm' => '8pm-9pm' }.values, appointment.followup_timeframe), {}, { class: 'form-control' } %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">FollowUp Comments</label>
+        <div class="col-md-9 col-sm-9 col-xs-12">
+          <%= f.text_field :followup_comments, :class => 'form-control' %>
+        </div>
+      </div>
+      <% end %>
+      <% if appointment.status == 'Reschedule' %>
+      <div class="form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Reschedule date</label>
+        <div class="col-md-9 xdisplay_inputx form-group has-feedback">
+          <%= f.hidden_field :reschedule_time, value: appointment.reschedule_time.to_formatted_s(:db), id: 'reschedule_corrected_date' %>
+          <input type="text" class="form-control has-feedback-left datepicker-reschedule" value="<%= appointment.reschedule_time.strftime("%m/%d/%Y") %>" required />
+          <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Reason for reschedule</label>
+        <div class="col-md-9 col-sm-9 col-xs-12">
+          <%= f.text_field :reschedule_reason, :class => 'form-control' %>
+        </div>
+      </div>
+      <% end %>
       <% end %>
 
 

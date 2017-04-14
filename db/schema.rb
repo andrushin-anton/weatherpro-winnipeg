@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170412212745) do
+ActiveRecord::Schema.define(version: 20170413234811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,14 +35,29 @@ ActiveRecord::Schema.define(version: 20170412212745) do
     t.string   "supply_install"
     t.string   "financing"
     t.integer  "installer_id"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
     t.datetime "end_time"
     t.datetime "followup_time"
     t.integer  "sealed"
     t.string   "booking_by"
     t.string   "type"
     t.string   "app_type"
+    t.string   "cancel_reason"
+    t.string   "followup_timeframe"
+    t.string   "followup_comments"
+    t.datetime "reschedule_time"
+    t.string   "reschedule_reason"
+    t.string   "sold_snap"
+    t.decimal  "sold_amount",          precision: 8, scale: 2
+    t.decimal  "sold_energy_charge",   precision: 8, scale: 2
+    t.decimal  "sold_gst",             precision: 8, scale: 2
+    t.decimal  "sold_credit_card",     precision: 8, scale: 2
+    t.decimal  "sold_total",           precision: 8, scale: 2
+    t.datetime "sold_due_on_delivery"
+    t.decimal  "sold_extra",           precision: 8, scale: 2
+    t.decimal  "sold_discount",        precision: 8, scale: 2
+    t.decimal  "sold_amount_of_total", precision: 8, scale: 2
     t.index ["followup_time"], name: "index_appointments_on_followup_time", using: :btree
     t.index ["installer_id"], name: "index_appointments_on_installer_id", using: :btree
     t.index ["schedule_time"], name: "index_appointments_on_schedule_time", using: :btree

@@ -32,10 +32,28 @@ $(document).on('turbolinks:load', function() {
     });
 
     $('.datepicker-seller').datepicker({ dateFormat: 'yy-mm-dd' });
+    $('.datepicker-followup').datepicker({ dateFormat: 'yy-mm-dd' });
+    $('.datepicker-delivery').datepicker({ dateFormat: 'yy-mm-dd' });
+    $('.datepicker-reschedule').datepicker({ dateFormat: 'yy-mm-dd' });
     $('.datepicker-seller').change(function() {
         var date = new Date($(this).val());
         var corrected_date = date.getFullYear() + '-' + (parseInt(date.getMonth()) + 1) + '-' + date.getDate();
         $("#corrected_date").val(corrected_date);
+    });
+    $('.datepicker-followup').change(function() {
+        var date = new Date($(this).val());
+        var corrected_date = date.getFullYear() + '-' + (parseInt(date.getMonth()) + 1) + '-' + date.getDate();
+        $("#followup_corrected_date").val(corrected_date);
+    });
+    $('.datepicker-reschedule').change(function() {
+        var date = new Date($(this).val());
+        var corrected_date = date.getFullYear() + '-' + (parseInt(date.getMonth()) + 1) + '-' + date.getDate();
+        $("#reschedule_corrected_date").val(corrected_date);
+    });
+    $('.datepicker-delivery').change(function() {
+        var date = new Date($(this).val());
+        var corrected_date = date.getFullYear() + '-' + (parseInt(date.getMonth()) + 1) + '-' + date.getDate();
+        $("#delivery_corrected_date").val(corrected_date);
     });
 
     $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
@@ -87,6 +105,9 @@ function select_seller_option(value) {
     } else if (value == 'canceled') {
         $('.seller-action-form').hide();
         $('#canceled-seller-action-form').show();
+    } else if (value == 'reschedule') {
+        $('.seller-action-form').hide();
+        $('#reschedule-seller-action-form').show();
     }
 }
 

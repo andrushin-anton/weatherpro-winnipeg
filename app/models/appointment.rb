@@ -257,6 +257,28 @@ class Appointment < ApplicationRecord
         end
     end
 
+    def get_time_frame
+        case self.schedule_time.strftime("%H").to_i
+        when  9
+            return '9am-10am'
+        when 10..11
+            return '10am-12am'
+        when 12..13
+            return '12pm-2pm'
+        when 14..15
+            return '2pm-4pm'
+        when 16..17
+            return '4pm-6pm'
+        when 18..19
+            return '6pm-8pm'
+        when 20..21
+            return '8pm-9pm'
+        else
+            return '9am-10am'
+        end
+    end
+    
+
     before_create do
         if is_new_customer?
             # Create a new customer and assing to this Appointment            

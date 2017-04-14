@@ -181,6 +181,6 @@ class AppointmentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def appointment_params
-      params.require(:appointment).permit(:booking_by, :app_type, :sealed, :followup_time, :new_customer_first_name, :new_customer_last_name, :new_customer_phone, :new_customer_home_phone, :new_customer_email, :status, :is_new_customer, :schedule_time, :end_time, :comments, :seller_id, :customer_id, :address, :city, :province, :postal_code, :windows_num, :doors_num, :how_soon, :quotes_num, :hear_about_us, :homeoweners_at_home, :supply_install, :financing, :installer_id)
+      params.require(:appointment).permit(:sold_amount_of_total, :sold_discount, :sold_extra, :sold_due_on_delivery, :sold_total, :sold_credit_card, :sold_gst, :sold_energy_charge, :sold_amount, :sold_snap, :reschedule_reason, :reschedule_time, :followup_timeframe, :followup_comments, :cancel_reason, :booking_by, :app_type, :sealed, :followup_time, :new_customer_first_name, :new_customer_last_name, :new_customer_phone, :new_customer_home_phone, :new_customer_email, :status, :is_new_customer, :schedule_time, :end_time, :comments, :seller_id, :customer_id, :address, :city, :province, :postal_code, :windows_num, :doors_num, :how_soon, :quotes_num, :hear_about_us, :homeoweners_at_home, :supply_install, :financing, :installer_id)
     end
 end
