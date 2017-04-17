@@ -105,7 +105,9 @@ $(document).on('turbolinks:load', function() {
     });
 
     $('#s3_uploader').bind('s3_upload_complete', function(e, content) {
+        var attachments_count = parseInt($('#sold-attachments-count').val());
         attachments_count = attachments_count + 1;
+        $('#sold-attachments-count').val(attachments_count);
     });
 
     $('#s3_uploader').bind('s3_upload_failed', function(e, content) {
