@@ -65,8 +65,10 @@
     <% if defined? hour %>
     <% if available > 0 %>
     <% if can? :new, Appointment %>
+        <% if (current_user.role == 'master' || current_user.role == 'admin') || ((day > Date.today - 1.day) && (current_user.role == 'manager' || current_user.role == 'telemarketer')) %>
         <% date_time = day.strftime('%Y-%m-%d ' + hour.to_s + ':00:00') %>
         <a href="<%= new_appointment_path %>/<%= DateTime.parse(date_time).to_i %>"><i class="fa fa-tags"></i> Add</a>
+        <% end %>
     <% end %>
     <% end %>
     <% end %>
