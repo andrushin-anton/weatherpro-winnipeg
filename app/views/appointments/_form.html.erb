@@ -362,7 +362,7 @@
           <%= f.hidden_field :sold_due_on_delivery, value: Date.today.to_formatted_s(:db), id: 'delivery_corrected_date' %>
           <input type="text" class="form-control has-feedback-left datepicker-delivery" value="<%= Date.today.strftime("%m/%d/%Y") %>" required />
           <% else %>
-          <%= f.hidden_field :sold_due_on_delivery, value: appointment.reschedule_time.to_formatted_s(:db), id: 'delivery_corrected_date' %>
+          <%= f.hidden_field :sold_due_on_delivery, value: appointment.sold_due_on_delivery.to_formatted_s(:db), id: 'delivery_corrected_date' %>
           <input type="text" class="form-control has-feedback-left datepicker-delivery" value="<%= appointment.sold_due_on_delivery.strftime("%m/%d/%Y") %>" required />
           <% end %>
           <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
