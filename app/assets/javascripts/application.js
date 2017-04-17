@@ -19,6 +19,8 @@
 //= require s3_direct_upload
 
 $(document).on('turbolinks:load', function() {
+    process_attachments();
+
     $('.cell-phone').mask('000-000-0000');
     $('.home-phone').mask('000-000-0000');
 
@@ -34,6 +36,7 @@ $(document).on('turbolinks:load', function() {
     $('.datepicker-seller').datepicker({ dateFormat: 'yy-mm-dd' });
     $('.datepicker-followup').datepicker({ dateFormat: 'yy-mm-dd' });
     $('.datepicker-delivery').datepicker({ dateFormat: 'yy-mm-dd' });
+    $('.datepicker-delivery-dead-line').datepicker({ dateFormat: 'yy-mm-dd' });
     $('.datepicker-reschedule').datepicker({ dateFormat: 'yy-mm-dd' });
     $('.datepicker-seller').change(function() {
         var date = new Date($(this).val());
@@ -55,6 +58,11 @@ $(document).on('turbolinks:load', function() {
         var corrected_date = date.getFullYear() + '-' + (parseInt(date.getMonth()) + 1) + '-' + date.getDate();
         $("#delivery_corrected_date").val(corrected_date);
     });
+    $('.datepicker-delivery-dead-line').change(function() {
+        var date = new Date($(this).val());
+        var corrected_date = date.getFullYear() + '-' + (parseInt(date.getMonth()) + 1) + '-' + date.getDate();
+        $("#delivery_dead_line_corrected_date").val(corrected_date);
+    });
 
     $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
     $('.datepicker').change(function() {
@@ -67,13 +75,37 @@ $(document).on('turbolinks:load', function() {
         });
     });
 
+    $('.grills-select').change(function() {
+        if ($(this).val() == 'NO') {
+            $('.grills-type-div').hide();
+            $('.grills-type-select').hide();
+        } else {
+            $('.grills-type-div').show();
+            $('.grills-type-select').show();
+        }
+    });
+
+    $('.privacy-glass-select').change(function() {
+        if ($(this).val() == 'NO') {
+            $('.privacy-glass-type-div').hide();
+            $('.privacy-glass-type-select').hide();
+        } else {
+            $('.privacy-glass-type-div').show();
+            $('.privacy-glass-type-select').show();
+        }
+    });
+
+    $('.sold-form').change(function() {
+        process_attachments();
+    });
+
     $('#s3_uploader').S3Uploader({
         remove_completed_progress_bar: false,
         progress_bar_target: $('#uploads_container')
     });
 
     $('#s3_uploader').bind('s3_upload_complete', function(e, content) {
-        $('#submit-sold').removeAttr("disabled");
+        attachments_count = attachments_count + 1;
     });
 
     $('#s3_uploader').bind('s3_upload_failed', function(e, content) {
@@ -144,4 +176,27 @@ function processEndTime(value) {
         end_time = '21:00:00';
     }
     return end_time;
+}
+
+function process_attachments() {
+    var attachments_count = parseInt($('#sold-attachments-count').val());
+    var minimum_files = 2;
+
+    // if GRILLS - YES then minimum_files = 3
+    if ($('.grills-select').val() == 'YES') {
+        $('#required-label').html('Contract pdf or jpg, Deposit pdf or jpg, Grills type (required)');
+        minimum_files = 3;
+    } else {
+        $('#required-label').html('Contract pdf or jpg, Deposit pdf or jpg (required)');
+        minimum_files = 2;
+    }
+
+    if (attachments_count >= minimum_files) {
+        $('#submit-sold').attr('disabled', false);
+    } else {
+        $('#submit-sold').attr('disabled', true);
+    }
+
+    console.log('Minimum:' + minimum_files);
+
 }
