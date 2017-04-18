@@ -21,7 +21,7 @@ class InstallerScheduleController < ApplicationController
     @days_from_this_week = (today.at_beginning_of_week..today.at_end_of_week).map
     # start and end dates for cursors
     start_time = Time.parse(today.at_beginning_of_week.to_s)
-    end_time = Time.parse(today.at_end_of_week.to_s)
+    end_time = Time.parse((today.at_end_of_week + 1.day).to_s)
     # get selller's schedule
     @schedule = InstallerSchedule.search(@installer.id, start_time, end_time)
     # get appointments

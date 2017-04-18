@@ -28,7 +28,7 @@ class AppointmentsController < ApplicationController
       start_time = Time.parse(today.at_beginning_of_week.to_s)
     end
   
-    end_time = Time.parse(today.at_end_of_week.to_s)
+    end_time = Time.parse((today.at_end_of_week + 1.day).to_s)
     
     # get appointments
     @appointments = Appointment.search(current_user, params[:search], start_time, end_time)

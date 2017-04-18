@@ -47,6 +47,7 @@ class AccessPolicy
         :password, :activate, :administrators, :administrators_new, :administrators_create,
         :sellers, :sellers_new, :sellers_create,
         :installers, :installers_new, :installers_create,
+        :managers, :manager_new, :manager_create,
         :telemarketers, :telemarketers_new, :telemarketers_create
       ], User
       can [:index, :logs], Logs
@@ -62,6 +63,7 @@ class AccessPolicy
         :index, :create, :new, :show, :edit, :update, :destroy, :update_password, 
         :password, :activate, :sellers, :sellers_new, :sellers_create,
         :installers, :installers_new, :installers_create,
+        :managers, :manager_new, :manager_create,
         :telemarketers, :telemarketers_new, :telemarketers_create
       ], User
       can [:index, :logs], Logs

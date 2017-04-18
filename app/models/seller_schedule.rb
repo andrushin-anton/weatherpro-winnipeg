@@ -1,26 +1,26 @@
 class SellerSchedule < ApplicationRecord
 
     def self.search_by_date_range(start_time, end_time)
-        self.where('schedule_time >= ? AND schedule_time < ?', start_time, end_time).order('id ASC').all
+        self.where('schedule_time >= ? AND schedule_time <= ?', start_time, end_time).order('id ASC').all
     end
 
     def self.seller_ids_by_date_range(start_time, end_time)
-        self.select(:seller_id).where('schedule_time >= ? AND schedule_time < ?', start_time, end_time).order('id ASC').map(&:seller_id)
+        self.select(:seller_id).where('schedule_time >= ? AND schedule_time <= ?', start_time, end_time).order('id ASC').map(&:seller_id)
     end
 
     def self.search(seller_id, start_time, end_time)
-        self.select(:schedule_time).where('schedule_time >= ? AND schedule_time < ? AND seller_id = ?', start_time, end_time, seller_id).order('id ASC').map(&:schedule_time)
+        self.select(:schedule_time).where('schedule_time >= ? AND schedule_time <= ? AND seller_id = ?', start_time, end_time, seller_id).order('id ASC').map(&:schedule_time)
     end
 
     def self.remove_existing(seller_id, start_time, end_time)
-        self.where('schedule_time >= ? AND schedule_time < ? AND seller_id = ?', start_time, end_time, seller_id).destroy_all
+        self.where('schedule_time >= ? AND schedule_time <= ? AND seller_id = ?', start_time, end_time, seller_id).destroy_all
     end
 
     def self.bookings_available(start_time, end_time, appointment = nil)
         # get all available schedules between given dates
-        schedules = self.where('schedule_time >= ? AND schedule_time < ?', start_time, end_time).order('id ASC').all
+        schedules = self.where('schedule_time >= ? AND schedule_time <= ?', start_time, end_time).order('id ASC').all
         # get all assigned appointments between given dates
-        appointments = Appointment.where('schedule_time >= ? AND schedule_time < ? AND status != ? AND status != ? AND status != ?', start_time, end_time, 'FollowUp', 'Cancelled', 'Sold').order('id ASC').all
+        appointments = Appointment.where('schedule_time >= ? AND schedule_time <= ? AND status != ? AND status != ? AND status != ?', start_time, end_time, 'FollowUp', 'Cancelled', 'Sold').order('id ASC').all
         # calculate bookings available
         days = (start_time..end_time).map
         time_frames = [9,10,12,14,16,18,20]
