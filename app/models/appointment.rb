@@ -4,7 +4,7 @@ class Appointment < ApplicationRecord
     validates :customer_id, presence: true, :unless => :is_new_customer?
     validates :new_customer_first_name, presence: true, :if => :is_new_customer?
     validates :new_customer_last_name, presence: true, :if => :is_new_customer?
-    validates :new_customer_phone, presence: true, :if => :is_new_customer?
+    #validates :new_customer_phone, presence: true, :if => :is_new_customer?
     validates :new_customer_email, allow_blank: true, length: { maximum: 70 }, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }, :if => :is_new_customer?
     
     belongs_to :customer
