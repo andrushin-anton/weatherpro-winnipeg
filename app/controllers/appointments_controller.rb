@@ -144,10 +144,23 @@ class AppointmentsController < ApplicationController
 
     if current_user.role == 'seller'
       @appointment.sold_by = current_user.first_name + ' ' + current_user.last_name + ', ' + DateTime.now.to_formatted_s(:db) if params[:appointment][:status] == 'Sold'
-    end
+    end    
 
     respond_to do |format|
       if @appointment.update(appointment_params)
+
+        if current_user.role == 'admin' || current_user.role == 'master' || current_user.role == 'manager'
+          if @appointment.status == 'Reschedule'
+            @appointment.reschedule_time = @appointment.schedule_time if @appointment.reschedule_time.nil?
+            @appointment.save
+          end
+          if @appointment.status == 'FollowUp'
+            @appointment.followup_time = @appointment.schedule_time if @appointment.followup_time.nil?
+            @appointment.followup_timeframe = '9am-10am'
+            @appointment.save
+          end          
+        end
+
         format.html { redirect_to appointments_path, notice: 'Appointment was successfully updated.' }
         format.json { render :show, status: :ok, location: @appointment }
       else
