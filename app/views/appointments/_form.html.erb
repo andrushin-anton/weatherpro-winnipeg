@@ -571,55 +571,5 @@
             $('#gmap').html('<iframe src="http://maps.google.com/maps?q='+encodeURIComponent(postal)+'&output=embed" style="border:none;width:100%;height:250px;" class="form-control"></iframe>');
           }
         });
-        
-        $('.cell-phone').focusout(function(){
-          console.log($('#appointment_is_new_customer_0').prop('checked'));
-          if ($('#appointment_is_new_customer_0').prop('checked') == true) {
-              find_customer($('.cell-phone').val()).done(function(data){    
-                $('.home-phone').val(data.customer.home_phone);
-                $('.first_name').val(data.customer.first_name);
-                $('.last_name').val(data.customer.last_name);
-                $('.email').val(data.customer.email);
-
-                if (data.appointmet != null || data.appointmet != 'null') {
-                  $('.address').val(data.appointment.address);
-                  $('.city').val(data.appointment.city);
-                  $('.postal').val(data.appointment.postal_code);
-                  $('.province option[value="'+data.appointment.province+'"]').attr('selected', true);
-                }
-
-                // this is existing customer 
-                $('#customer_id').val(data.customer.id);
-                $('#appointment_is_new_customer_1').prop('checked', false);
-                $('#appointment_is_new_customer_0').prop('checked', true);
-            });
-          
-               
-            find_customer($('.cell-phone').val()).fail(function(data){
-                // not found
-                $('#customer_id').val('');
-                $('#appointment_is_new_customer_1').prop('checked', true);
-                $('#appointment_is_new_customer_0').prop('checked', false);
-                //$('.home-phone').val('');
-                //$('.first_name').val('');
-                //$('.last_name').val('');
-                //$('.email').val('');
-                //$('.address').val('');
-                //$('.city').val('');
-                //$('.postal').val('');
-            });
-          }   
-        });
-
-        $('input[type=radio][name="appointment[is_new_customer]"]').change(function() {
-            //if (this.value == 1) {
-            //  $('#existing_customer').hide();
-            //  $('#new_customer').show();
-            // }
-            //else if (this.value == 0) {
-            //  $('#existing_customer').show();
-            //  $('#new_customer').hide();     
-            // }
-        });
       });
     </script>
