@@ -1,5 +1,5 @@
 class AppointmentsController < ApplicationController
-  before_action :set_appointment, only: [:show, :edit, :update, :destroy]
+  before_action :set_appointment, only: [:show, :edit, :update, :destroy, :archive, :delete]
 
   # GET /appointments
   # GET /appointments.json
@@ -167,6 +167,34 @@ class AppointmentsController < ApplicationController
         format.html { render :edit }
         format.json { render json: @appointment.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  # GET /appointments/1/archive
+  # GET /appointments/1/archive.json
+  def archive
+    authorize! :archive, @appointment
+
+    @appointment.status = 'Archived'
+    @appointment.save
+    
+    respond_to do |format|
+      format.html { redirect_to appointments_url, notice: 'Appointment was successfully archived.' }
+      format.json { head :no_content }
+    end
+  end
+  
+  # GET /appointments/1/delete
+  # GET /appointments/1/delete.json
+  def delete
+    authorize! :delete, @appointment
+
+    @appointment.status = 'Deleted'
+    @appointment.save
+    
+    respond_to do |format|
+      format.html { redirect_to appointments_url, notice: 'Appointment was successfully deleted.' }
+      format.json { head :no_content }
     end
   end
 

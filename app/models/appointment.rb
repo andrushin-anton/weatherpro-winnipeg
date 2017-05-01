@@ -75,8 +75,8 @@ class Appointment < ApplicationRecord
         else
             if user.role == 'admin' || user.role == 'manager' || user.role == 'master'
                 self.where(
-                    'status != ? AND schedule_time >= ? AND schedule_time < ?',
-                    "#{self.statuses[:FollowUp]}", start_time, end_time
+                    'status NOT IN(?) AND schedule_time >= ? AND schedule_time < ?',
+                    ['FollowUp','Archived','Deleted'], start_time, end_time
                 ).order('id DESC').all
             elsif user.role == 'telemarketer'
                 self.where(
@@ -85,13 +85,13 @@ class Appointment < ApplicationRecord
                 ).order('id DESC').all
             elsif user.role == 'seller'
                 self.where(
-                    'status != ? AND schedule_time >= ? AND schedule_time < ? AND seller_id = ?', 
-                    "#{self.statuses[:FollowUp]}", start_time, end_time, user.id
+                    'status NOT IN(?) AND schedule_time >= ? AND schedule_time < ? AND seller_id = ?', 
+                    ['FollowUp','Archived','Deleted'], start_time, end_time, user.id
                 ).order('id DESC').all
             else
                 self.where(
-                    'status != ? AND schedule_time >= ? AND schedule_time < ? AND installer_id = ?', 
-                    "#{self.statuses[:FollowUp]}", start_time, end_time, user.id
+                    'status NOT IN(?) AND schedule_time >= ? AND schedule_time < ? AND installer_id = ?', 
+                    ['FollowUp','Archived','Deleted'], start_time, end_time, user.id
                 ).order('id DESC').all
             end
         end
@@ -151,8 +151,8 @@ class Appointment < ApplicationRecord
             ).order('id DESC').all           
         else
             self.where(
-                'status != ? AND schedule_time >= ? AND schedule_time < ? AND seller_id = ?',
-                "#{self.statuses[:FollowUp]}", start_time, end_time, seller_id
+                'status NOT IN(?) AND schedule_time >= ? AND schedule_time < ? AND seller_id = ?',
+                ['FollowUp','Archived','Deleted'], start_time, end_time, seller_id
             ).order('id DESC').all
         end
     end
@@ -180,8 +180,8 @@ class Appointment < ApplicationRecord
             ).order('id DESC').all           
         else
             self.where(
-                'status != ? AND schedule_time >= ? AND schedule_time < ? AND installer_id = ?',
-                "#{self.statuses[:FollowUp]}", start_time, end_time, installer_id
+                'status NOT IN(?) AND schedule_time >= ? AND schedule_time < ? AND installer_id = ?',
+                ['FollowUp','Archived','Deleted'], start_time, end_time, installer_id
             ).order('id DESC').all
         end
     end

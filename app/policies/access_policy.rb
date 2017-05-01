@@ -38,7 +38,7 @@ class AccessPolicy
     # end
 
     role :master, proc { |user| user.role == 'master' } do
-      can [:index, :create, :new, :show, :edit, :update, :destroy], Appointment
+      can [:index, :create, :new, :show, :edit, :update, :destroy, :archive, :delete], Appointment
       can [:index, :create, :new, :show, :edit, :update, :destroy], Customer
       can [:show, :update], SellerSchedule
       can [:show, :update], InstallerSchedule
@@ -55,7 +55,7 @@ class AccessPolicy
     end
 
     role :admin, proc { |user| user.role == 'admin' } do
-      can [:index, :create, :new, :show, :edit, :update, :destroy], Appointment
+      can [:index, :create, :new, :show, :edit, :update, :destroy, :archive, :delete], Appointment
       can [:index, :create, :new, :show, :edit, :update, :destroy], Customer
       can [:show, :update], SellerSchedule
       can [:show, :update], InstallerSchedule

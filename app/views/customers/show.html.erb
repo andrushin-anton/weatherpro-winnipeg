@@ -7,26 +7,28 @@
       <div class="x_content">
         <ul class="list-unstyled timeline">
         <% @customer.appointments.each do |app| %>
-          <li>
-            <div class="block">
-              <div class="tags">
-                <a href="" class="tag">
-                  <span><%= app.province %></span>
-                </a>
-              </div>
-              <div class="block_content">
-                <h2 class="title">
-                  <a><%= app.address %>, <%= app.city %>, <%= app.province %></a>
-                </h2>
-                <div class="byline">
-                  <span><%= app.schedule_time.to_formatted_s(:short) %></span>
+          <% if app.status != 'Deleted' %>
+            <li>
+              <div class="block">
+                <div class="tags">
+                  <a href="" class="tag">
+                    <span><%= app.province %></span>
+                  </a>
                 </div>
-                <p class="excerpt">
-                  Status: <%= app.status %>
-                </p>
+                <div class="block_content">
+                  <h2 class="title">
+                    <a><%= app.address %>, <%= app.city %>, <%= app.province %></a>
+                  </h2>
+                  <div class="byline">
+                    <span><%= app.schedule_time.to_formatted_s(:short) %></span>
+                  </div>
+                  <p class="excerpt">
+                    Status: <%= app.status %>
+                  </p>
+                </div>
               </div>
-            </div>
-          </li>
+            </li>
+            <% end %>
           <% end %>
         </ul>
       </div>
