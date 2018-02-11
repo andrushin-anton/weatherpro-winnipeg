@@ -41,7 +41,6 @@ ActiveRecord::Schema.define(version: 20170415184407) do
     t.datetime "followup_time"
     t.integer  "sealed"
     t.string   "booking_by"
-    t.string   "type"
     t.string   "app_type"
     t.string   "cancel_reason"
     t.string   "followup_timeframe"
