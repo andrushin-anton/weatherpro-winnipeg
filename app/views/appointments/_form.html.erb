@@ -182,7 +182,7 @@
         <label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
         <div id="gmap" class="col-md-9 col-sm-9 col-xs-12">
             <% if edit_mode == true && appointment.postal_code != '' %>
-            <iframe src="http://maps.google.com/maps?q=<%=u appointment.postal_code %>&output=embed" style="border:none;width:100%;height:250px;" class="form-control"></iframe>
+            <iframe src="https://maps.google.com/maps?q=<%=u appointment.postal_code %>&output=embed" style="border:none;width:100%;height:250px;" class="form-control"></iframe>
             <% end %>
         </div>
       </div>
@@ -568,7 +568,7 @@
         $('.postal').focusout(function(){
           var postal = $('.postal').val();
           if (postal != '') {
-            $('#gmap').html('<iframe src="http://maps.google.com/maps?q='+encodeURIComponent(postal)+'&output=embed" style="border:none;width:100%;height:250px;" class="form-control"></iframe>');
+            $('#gmap').html('<iframe src="https://maps.google.com/maps?q='+encodeURIComponent(postal)+'&output=embed" style="border:none;width:100%;height:250px;" class="form-control"></iframe>');
           }
         });
       });

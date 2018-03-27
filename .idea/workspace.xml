@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c779fec1-cd01-4ec4-96ed-b81cdfd82137" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/windows.iml" afterPath="$PROJECT_DIR$/.idea/windows.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Gemfile.lock" afterPath="$PROJECT_DIR$/Gemfile.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/layouts/application.html.erb" afterPath="$PROJECT_DIR$/app/views/layouts/application.html.erb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/layouts/sessions.html.erb" afterPath="$PROJECT_DIR$/app/views/layouts/sessions.html.erb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/sessions/new.html.erb" afterPath="$PROJECT_DIR$/app/views/sessions/new.html.erb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/database.yml" afterPath="$PROJECT_DIR$/config/database.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db/seeds.rb" afterPath="$PROJECT_DIR$/db/seeds.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/appointments/_form.html.erb" afterPath="$PROJECT_DIR$/app/views/appointments/_form.html.erb" />
     </list>
     <ignored path="$PROJECT_DIR$/.bundle/" />
     <ignored path="$PROJECT_DIR$/components/" />
@@ -36,12 +29,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="s3_direct_upload.rb" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/config/initializers/s3_direct_upload.rb">
+      <file leaf-file-name="_form.html.erb" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/views/appointments/_form.html.erb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="3" lean-forward="true" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
-              <folding />
+            <state relative-caret-position="500">
+              <caret line="566" column="36" lean-forward="true" selection-start-line="566" selection-start-column="36" selection-end-line="566" selection-end-column="36" />
+              <folding>
+                <marker date="1522175612000" expanded="true" signature="29576:29612" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -52,6 +47,7 @@
     <findStrings>
       <find>tz</find>
       <find>Qualitech Windows Manufacturing</find>
+      <find>maps.google.com</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/app/views</dir>
@@ -69,6 +65,7 @@
         <option value="$PROJECT_DIR$/db/seeds.rb" />
         <option value="$PROJECT_DIR$/app/views/layouts/sessions.html.erb" />
         <option value="$PROJECT_DIR$/app/views/layouts/application.html.erb" />
+        <option value="$PROJECT_DIR$/app/views/appointments/_form.html.erb" />
       </list>
     </option>
   </component>
@@ -105,6 +102,24 @@
             <path>
               <item name="scheduler-demo" type="b2602c69:ProjectViewProjectNode" />
               <item name="scheduler-demo" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="scheduler-demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="scheduler-demo" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="scheduler-demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="scheduler-demo" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="scheduler-demo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="scheduler-demo" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="appointments" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -246,17 +261,18 @@
       <option name="presentableId" value="Default" />
       <updated>1518359673653</updated>
       <workItem from="1518359674948" duration="1141000" />
-      <workItem from="1522150458653" duration="3630000" />
+      <workItem from="1522150458653" duration="4313000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4771000" />
+    <option name="totallyTimeSpent" value="5454000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="152" y="135" width="1582" height="823" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24090908" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24090908" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987013" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -355,16 +371,6 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/appointments/_form.html.erb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="454">
-          <caret line="550" column="14" lean-forward="true" selection-start-line="550" selection-start-column="14" selection-end-line="550" selection-end-column="14" />
-          <folding>
-            <marker date="1518359571000" expanded="true" signature="29574:29610" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -594,9 +600,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/config/initializers/s3_direct_upload.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="3" lean-forward="true" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
+        <state relative-caret-position="60">
+          <caret line="4" column="34" lean-forward="false" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/appointments/_events.html.erb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/appointments/_form.html.erb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="566" column="36" lean-forward="true" selection-start-line="566" selection-start-column="36" selection-end-line="566" selection-end-column="36" />
+          <folding>
+            <marker date="1522175612000" expanded="true" signature="29576:29612" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
