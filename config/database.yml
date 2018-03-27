@@ -7,14 +7,14 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  database: windows
+  database: scheduler
   pool: 5
   username: postgres
   password: postgres
 
 development:
   <<: *default
-  username: windows
+  username: scheduler
   password: qwerty
 
 # Warning: The database defined as "test" will be erased and
@@ -22,7 +22,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: windows_test
+  database: scheduler_test
 
 production:
   <<: *default

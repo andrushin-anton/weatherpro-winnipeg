@@ -6,8 +6,8 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-User.create! first_name: "Windows", last_name: "Doors", email: "9142045@gmail.com", password: "password", status: "ACTIVE", role: "admin"
+User.create! first_name: "Admin", last_name: "", email: "admin@gmail.com", password: "password", status: "ACTIVE", role: "admin"
 User.create! first_name: "Anton", last_name: "Andrushin", email: "andrushin.anton@gmail.com", password: "password", status: "ACTIVE", role: "admin"
-User.create! first_name: "Manager", last_name: "W&D", email: "manager@gmail.com", password: "password", status: "ACTIVE", role: "manager"
-User.create! first_name: "Seller", last_name: "W&D", email: "seller@gmail.com", password: "password", status: "ACTIVE", role: "seller"
-User.create! first_name: "Installer", last_name: "W&D", email: "installer@gmail.com", password: "password", status: "ACTIVE", role: "installer"
+User.create! first_name: "Manager", last_name: "", email: "manager@gmail.com", password: "password", status: "ACTIVE", role: "manager"
+User.create! first_name: "Seller", last_name: "", email: "seller@gmail.com", password: "password", status: "ACTIVE", role: "seller"
+User.create! first_name: "Installer", last_name: "", email: "installer@gmail.com", password: "password", status: "ACTIVE", role: "installer"
