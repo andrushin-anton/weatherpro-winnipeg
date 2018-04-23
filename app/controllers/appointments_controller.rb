@@ -158,7 +158,7 @@ class AppointmentsController < ApplicationController
             @appointment.followup_time = @appointment.schedule_time if @appointment.followup_time.nil?
             @appointment.followup_timeframe = '9am-10am'
             @appointment.save
-          end          
+          end
         end
 
         format.html { redirect_to appointments_path, notice: 'Appointment was successfully updated.' }

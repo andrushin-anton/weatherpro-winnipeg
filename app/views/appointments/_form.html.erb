@@ -104,6 +104,16 @@
       </div>
       <% end %>
 
+        <% if edit_mode %>
+          <% if current_user.role == 'admin' || current_user.role == 'master' || current_user.role == 'manager' %>
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Installer</label>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                  <%= f.select :installer_id, options_for_select(@installers.map{ |c| [c.full_name, c.id] }, appointment.installer_id), {:include_blank => 'None Specified'}, { class: 'form-control' } %>
+                </div>
+              </div>
+          <% end %>
+        <% end %>
 
       <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Cell Phone</label>
@@ -533,7 +543,7 @@
     <% end %>
 
 
-    <% if current_user.role == 'admin' || current_user.role == 'master' %>
+    <% if current_user.role == 'admin' || current_user.role == 'master' || current_user.role == 'manager' %>
     <% if edit_mode %>
     <div class="ln_solid"></div>
     <%= s3_uploader_form callback_url: new_url,

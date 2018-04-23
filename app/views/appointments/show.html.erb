@@ -143,6 +143,27 @@
           </div>
         </script>
         <br>
+        <br>
+        <% if current_user.role == 'installer' %>
+          <div class="ln_solid"></div>
+          <%= s3_uploader_form callback_url: new_url,
+                               id: "s3_uploader",
+                               callback_param: "file_url",
+                               expiration: 2.hours.from_now.utc.iso8601,
+                               callback_method: "POST",
+                               max_file_size: 10.megabytes,
+                               data: {:key => :val} do %>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Attach files(optional)</label>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                  <%= file_field_tag :file, multiple: false, class: 'form-control' %>
+                </div>
+              </div>
+          <% end %>
+        <% end %>
+        <br>
+        <br>
         <%= form_for @appointment, :html => {:class => 'form-horizontal form-label-left input_mask'} do |f| %>
         <div class="ln_solid"></div>
         <div class="form-group">
@@ -198,11 +219,11 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Choose date</label>
                             <div class="col-md-9 xdisplay_inputx form-group has-feedback">
                               <% if @appointment.reschedule_time.nil? || @appointment.reschedule_time == '' %>
-                              <%= f.hidden_field :reschedule_time, value: @appointment.schedule_time.to_formatted_s(:db), id: 'corrected_date' %>
-                              <input type="text" class="form-control has-feedback-left datepicker-seller" value="<%= Date.today.strftime("%m/%d/%Y") %>" required />
+                              <%= f.hidden_field :reschedule_time, value: @appointment.schedule_time.to_formatted_s(:db), id: 'reschedule_corrected_date' %>
+                              <input type="text" class="form-control has-feedback-left datepicker-reschedule" value="<%= Date.today.strftime("%m/%d/%Y") %>" required />
                               <% else %>
-                              <%= f.hidden_field :reschedule_time, value: @appointment.reschedule_time.to_formatted_s(:db), id: 'corrected_date' %>
-                              <input type="text" class="form-control has-feedback-left datepicker-seller" value="<%= @appointment.reschedule_time.strftime("%m/%d/%Y") %>" required />
+                              <%= f.hidden_field :reschedule_time, value: @appointment.reschedule_time.to_formatted_s(:db), id: 'reschedule_corrected_date' %>
+                              <input type="text" class="form-control has-feedback-left datepicker-reschedule" value="<%= @appointment.reschedule_time.strftime("%m/%d/%Y") %>" required />
                               <% end %>
                               <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                             </div>
@@ -236,11 +257,11 @@
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Choose date</label>
                             <div class="col-md-9 xdisplay_inputx form-group has-feedback">
-                              <%= f.hidden_field :followup_time, value: @appointment.schedule_time.to_formatted_s(:db), id: 'corrected_date' %>
+                              <%= f.hidden_field :followup_time, value: @appointment.schedule_time.to_formatted_s(:db), id: 'followup_corrected_date' %>
                               <% if @appointment.followup_time.nil? || @appointment.followup_time == '' %>
-                              <input type="text" class="form-control has-feedback-left datepicker-seller" value="<%= Date.today.strftime("%m/%d/%Y") %>" required />
+                              <input type="text" class="form-control has-feedback-left datepicker-followup" value="<%= Date.today.strftime("%m/%d/%Y") %>" required />
                               <% else %>
-                              <input type="text" class="form-control has-feedback-left datepicker-seller" value="<%= @appointment.followup_time.strftime("%m/%d/%Y") %>" required />
+                              <input type="text" class="form-control has-feedback-left datepicker-followup" value="<%= @appointment.followup_time.strftime("%m/%d/%Y") %>" required />
                               <% end %>
                               <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                             </div>
