@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c779fec1-cd01-4ec4-96ed-b81cdfd82137" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/initializers/s3_direct_upload.rb" afterPath="$PROJECT_DIR$/config/initializers/s3_direct_upload.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/appointments/_form.html.erb" afterPath="$PROJECT_DIR$/app/views/appointments/_form.html.erb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/sellers/new.html.erb" afterPath="$PROJECT_DIR$/app/views/sellers/new.html.erb" />
     </list>
     <ignored path="$PROJECT_DIR$/.bundle/" />
     <ignored path="$PROJECT_DIR$/components/" />
@@ -32,8 +33,8 @@
       <file leaf-file-name="s3_direct_upload.rb" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/config/initializers/s3_direct_upload.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="21" lean-forward="true" selection-start-line="9" selection-start-column="21" selection-end-line="9" selection-end-column="21" />
+            <state relative-caret-position="255">
+              <caret line="17" column="3" lean-forward="true" selection-start-line="17" selection-start-column="3" selection-end-line="17" selection-end-column="3" />
               <folding />
             </state>
           </provider>
@@ -67,12 +68,13 @@
       <find>Sellers..</find>
       <find>menu_toggle</find>
       <find>left_col</find>
+      <find>Project Manager</find>
     </findStrings>
     <dirStrings>
-      <dir>$PROJECT_DIR$/app</dir>
       <dir>$PROJECT_DIR$/app/views</dir>
       <dir>$PROJECT_DIR$/app/assets</dir>
       <dir>$PROJECT_DIR$/app/assets/stylesheets</dir>
+      <dir>$PROJECT_DIR$/app</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -139,13 +141,7 @@
             <path>
               <item name="calgary" type="b2602c69:ProjectViewProjectNode" />
               <item name="calgary" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="calgary" type="b2602c69:ProjectViewProjectNode" />
-              <item name="calgary" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
-              <item name="initializers" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -289,12 +285,12 @@
       <workItem from="1524246692730" duration="1292000" />
       <workItem from="1524329974539" duration="963000" />
       <workItem from="1524517842183" duration="3617000" />
-      <workItem from="1526505371934" duration="4975000" />
+      <workItem from="1526505371934" duration="5133000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16574000" />
+    <option name="totallyTimeSpent" value="16732000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="221" y="136" width="1582" height="823" extended-state="0" />
@@ -557,6 +553,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="319">
           <caret line="50" column="8" lean-forward="true" selection-start-line="50" selection-start-column="8" selection-end-line="50" selection-end-column="29" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -572,9 +571,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="8640">
           <caret line="576" column="36" lean-forward="true" selection-start-line="576" selection-start-column="36" selection-end-line="576" selection-end-column="36" />
-          <folding>
-            <marker date="1524519076000" expanded="true" signature="30225:30261" ph="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -708,8 +705,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/config/initializers/s3_direct_upload.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="21" lean-forward="true" selection-start-line="9" selection-start-column="21" selection-end-line="9" selection-end-column="21" />
+        <state relative-caret-position="255">
+          <caret line="17" column="3" lean-forward="true" selection-start-line="17" selection-start-column="3" selection-end-line="17" selection-end-column="3" />
           <folding />
         </state>
       </provider>
