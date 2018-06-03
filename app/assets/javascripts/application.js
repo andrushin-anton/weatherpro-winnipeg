@@ -184,15 +184,6 @@ function process_attachments() {
     var attachments_count = parseInt($('#sold-attachments-count').val());
     var minimum_files = 2;
 
-    // if GRILLS - YES then minimum_files = 3
-    if ($('.grills-select').val() == 'YES') {
-        $('#required-label').html('Contract pdf or jpg, Deposit pdf or jpg, Grills type (required)');
-        minimum_files = 3;
-    } else {
-        $('#required-label').html('Contract pdf or jpg, Deposit pdf or jpg (required)');
-        minimum_files = 2;
-    }
-
     if (attachments_count >= minimum_files) {
         $('#submit-sold').attr('disabled', false);
     } else {
