@@ -244,7 +244,7 @@
     <div class="form-group">
       <label class="control-label col-md-3 col-sm-3 col-xs-12">How did you hear about us</label>
       <div class="col-md-9 col-sm-9 col-xs-12">
-        <%= f.select :hear_about_us, { "Flyer" => "Flyer", "Google" => "Google", "Internet other" => "Internet other", "Telemarketing" => "Telemarketing", "Radio" => "Radio", "Refferal" => "Refferal", "World of month" => "World of month", "Neighboor" => "Neighboor", "Relative" => "Relative", "Other" => "Other" }, {}, {:class => 'form-control'} %>
+        <%= f.select :hear_about_us, { "Flyer" => "Flyer", "Money saver" => "Money saver", "Finest" => "Finest", "Sigh" => "Sigh", "Home stars" => "Home stars", "BBB" => "BBB", "Google" => "Google", "Internet other" => "Internet other", "Telemarketing" => "Telemarketing", "Radio" => "Radio", "Refferal" => "Refferal", "World of month" => "World of month", "Neighboor" => "Neighboor", "Relative" => "Relative", "Other" => "Other" }, {}, {:class => 'form-control'} %>
       </div>
     </div>
 
@@ -469,13 +469,6 @@
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Privacy glass</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
                 <%= f.select :sold_privacy_glass, options_for_select({ YES: :YES, NO: :NO }.values, appointment.sold_privacy_glass), {}, { class: 'form-control privacy-glass-select' } %>
-              </div>
-            </div>
-
-            <div class="form-group privacy-glass-type-div">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">Privacy glass type</label>
-              <div class="col-md-9 col-sm-9 col-xs-12">
-                <%= f.select :sold_privacy_glass_type, options_for_select({ 'MISSING INFO' => 'MISSING INFO' }.values, appointment.sold_privacy_glass_type), {}, { class: 'form-control privacy-glass-type-select' } %>
               </div>
             </div>
 

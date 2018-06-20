@@ -92,16 +92,6 @@ $(document).on('turbolinks:load', function() {
         }
     });
 
-    $('.privacy-glass-select').change(function() {
-        if ($(this).val() == 'NO') {
-            $('.privacy-glass-type-div').hide();
-            $('.privacy-glass-type-select').hide();
-        } else {
-            $('.privacy-glass-type-div').show();
-            $('.privacy-glass-type-select').show();
-        }
-    });
-
     $('.sold-form').change(function() {
         process_attachments();
     });
@@ -115,6 +105,7 @@ $(document).on('turbolinks:load', function() {
         var attachments_count = parseInt($('#sold-attachments-count').val());
         attachments_count = attachments_count + 1;
         $('#sold-attachments-count').val(attachments_count);
+        process_attachments();
     });
 
     $('#s3_uploader').bind('s3_upload_failed', function(e, content) {
