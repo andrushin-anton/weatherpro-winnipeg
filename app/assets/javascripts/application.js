@@ -68,11 +68,18 @@ $(document).on('turbolinks:load', function() {
     $('.datepicker').change(function() {
         var date = new Date($(this).val());
         var corrected_date = date.getFullYear() + '-' + (parseInt(date.getMonth()) + 1) + '-' + date.getDate();
+        var appointment_id = $('#appointment_id').val();
         $("#corrected_date").val(corrected_date);
 
-        find_booking_available(corrected_date).done(function(data) {
+        find_booking_available(appointment_id, corrected_date).done(function(data) {
             $('#time-frame-select').html(data);
         });
+
+        if ($('#appointment_status').val() == 'Sold') {
+            find_installers_available(appointment_id, corrected_date).done(function(data) {
+                $('#installers-select').html(data);
+            });
+        }
     });
 
     $('.grills-select').change(function() {
@@ -116,9 +123,16 @@ $(document).on('turbolinks:load', function() {
 });
 
 
-function find_booking_available(date) {
+function find_booking_available(appointment_id, date) {
     return $.ajax({
-        url: '/bookings/available/' + date,
+        url: '/bookings/available/' + appointment_id + '/' + date,
+        type: 'GET'
+    });
+}
+
+function find_installers_available(appointment_id, date) {
+    return $.ajax({
+        url: '/installers/available/' + appointment_id + '/' + date,
         type: 'GET'
     });
 }

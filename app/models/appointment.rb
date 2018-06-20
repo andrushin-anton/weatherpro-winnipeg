@@ -223,7 +223,7 @@ class Appointment < ApplicationRecord
         when :Cancelled
             return '#EC2D26'
         when :Sold
-            return '#4DB02F'
+            return self.installer_id == nil ? '#4DB02F' : '#66ccff'
         when :FollowUp
             return '#B326C9'
         else

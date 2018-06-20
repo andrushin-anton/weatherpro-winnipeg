@@ -47,18 +47,26 @@ class InstallersController < ApplicationController
     end
   end
 
+  def available
+    today = Date.parse(params[:date])
+    @appointment = Appointment.find(params[:appointment])
+    @installers = User.where(:status => 'ACTIVE', :role => 'installer', :id => InstallerSchedule.installer_ids_by_date_range(today, (today + 1.day)))
+
+    render layout: false, status: 200
+  end
+
   def destroy
     authorize! :installers_destroy, @installer
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @installer = User.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_user
+    @installer = User.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def allowed_params
-      params.require(:user).permit(:email, :password, :role, :first_name, :last_name, :password_confirmation)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def allowed_params
+    params.require(:user).permit(:email, :password, :role, :first_name, :last_name, :password_confirmation)
+  end
 end
