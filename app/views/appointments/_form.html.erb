@@ -91,7 +91,7 @@
         <% if current_user.role == 'telemarketer' %>
             <%= f.select :status, options_for_select({Telemarketing: :Telemarketing }.values, :Telemarketing), {}, { class: 'form-control' } %>
         <% else %>
-            <%= f.select :status, options_for_select({Lead: :Lead, Reschedule: :Reschedule, UpSell: :UpSell, Referral: :Referral, Telemarketing: :Telemarketing, Assigned: :Assigned, Cancelled: :Cancelled, Sold: :Sold, FollowUp: :FollowUp }.values, default_type), {}, { class: 'form-control' } %>
+            <%= f.select :status, options_for_select({Lead: :Lead, Reschedule: :Reschedule, UpSell: :UpSell, Referral: :Referral, Telemarketing: :Telemarketing, Assigned: :Assigned, Cancelled: :Cancelled, Sold: :Sold, FollowUp: :FollowUp, Completed: :Completed }.values, default_type), {}, { class: 'form-control' } %>
         <% end %>
       </div>
     </div>

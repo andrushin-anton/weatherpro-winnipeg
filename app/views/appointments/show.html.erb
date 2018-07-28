@@ -173,9 +173,19 @@
         </div>
         <div class="ln_solid"></div>
         <div class="form-group">
-          <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-            <%= f.submit 'Save Comments!', :class => 'btn btn-success' %>
-          </div>
+          <% if current_user.role == 'installer' %>
+              <div class="col-md-3 mb-2">
+                <%= f.submit 'Save Comments!', :class => 'btn btn-primary' %>
+              </div>
+              <div class="col-md-3 mb-2">
+                <%= f.submit 'Save Comments & Mark as Completed!', :name => 'installer_marks_as_completed', :class => 'btn btn-success' %>
+              </div>
+          <% else %>
+              <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                <%= f.submit 'Save Comments!', :name => 'comments', :class => 'btn btn-primary' %>
+              </div>
+          <% end %>
+
         </div>
     <% end %>
 

@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   get 'sellerschedule/:id/date/:date', to: 'seller_schedule#show', as: 'sellerscheduledate'
   post 'sellerscheduleupdate', to: 'seller_schedule#update', as: 'sellerscheduleupdate'
 
+  get 'appointments/find', to: 'appointments#search'
+
   resources :appointments
   resources :administrators
   resources :managers

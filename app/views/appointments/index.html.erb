@@ -1,18 +1,17 @@
+<div class="page-title">
+  <div class="title_left">
+    <h3>Appointments</h3>
+  </div>
 
-  <div class="page-title">
-    <div class="title_left">
-      <h3>Appointments</h3>
-    </div>
-
-    <div class="title_right">
+  <div class="title_right">
     <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-      <%= form_tag appointments_path, :method => 'get' do %>
-      <div class="input-group">
-          <input type="text" name="search" value="<%= params[:search] %>" class="form-control" placeholder="Search for...">
-          <span class="input-group-btn">
+      <%= form_tag appointments_find_path, :method => 'get' do %>
+          <div class="input-group">
+            <input type="text" name="search" value="<%= params[:search] %>" class="form-control" placeholder="Search for...">
+            <span class="input-group-btn">
           <%= submit_tag "Go!", :name => nil, :class => "btn btn-default search" %>
           </span>
-      </div>
+          </div>
       <% end %>
     </div>
   </div>
@@ -25,15 +24,15 @@
         <div class="x_title">
 
           <% unless current_user.role == 'admin' || current_user.role == 'master' %>
-          <h2>Click to add/edit</h2>
+              <h2>Click to add/edit</h2>
           <% else %>
-          <h2>Click to add/edit<small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Choose seller or installer to update their schedule:</small></h2>
-          
+              <h2>Click to add/edit<small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Choose seller or installer to update their schedule:</small></h2>
+
               <div class="col-md-2 col-sm-9 col-xs-1">
                 <select class="form-control" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
                   <option value="<%= appointments_path %>">Salesmen...</option>
                   <% @sellers.each do |user| %>
-                  <option value="<%= sellerschedule_path(user) %>"><%= user.full_name %></option>
+                      <option value="<%= sellerschedule_path(user) %>"><%= user.full_name %></option>
                   <% end %>
                 </select>
               </div>
@@ -42,7 +41,7 @@
                 <select class="form-control" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
                   <option value="<%= appointments_path %>">Installers...</option>
                   <% @installers.each do |user| %>
-                  <option value="<%= installerschedule_path(user) %>"><%= user.full_name %></option>
+                      <option value="<%= installerschedule_path(user) %>"><%= user.full_name %></option>
                   <% end %>
                 </select>
               </div>
@@ -53,109 +52,108 @@
 
 
           <div id="calendar" class="fc fc-unthemed fc-ltr">
-          <div class="fc-toolbar fc-header-toolbar">
-            <div class="fc-left">
-              <button type="button" class="fc-today-button fc-button fc-state-default fc-corner-left fc-corner-right" onclick="redirect('<%= appointments_path%>')">today</button>
+            <div class="fc-toolbar fc-header-toolbar">
+              <div class="fc-left">
+                <button type="button" class="fc-today-button fc-button fc-state-default fc-corner-left fc-corner-right" onclick="redirect('<%= appointments_path%>')">today</button>
 
-              <div class="fc-button-group">
-                <button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left" onclick="redirect('<%= @prev_url %>')">
-                <span class="fc-icon fc-icon-left-single-arrow"></span>
-                </button>
-                <button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right" onclick="redirect('<%= @next_url %>')">
-                <span class="fc-icon fc-icon-right-single-arrow"></span>
-                </button>
+                <div class="fc-button-group">
+                  <button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left" onclick="redirect('<%= @prev_url %>')">
+                    <span class="fc-icon fc-icon-left-single-arrow"></span>
+                  </button>
+                  <button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right" onclick="redirect('<%= @next_url %>')">
+                    <span class="fc-icon fc-icon-right-single-arrow"></span>
+                  </button>
+                </div>
+                <h2>Week</h2>
+
+                <div class="fc-button-group">
+                  <button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left" onclick="redirect('<%= @prev_month_url %>')">
+                    <span class="fc-icon fc-icon-left-single-arrow"></span>
+                  </button>
+                  <button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right" onclick="redirect('<%= @next_month_url %>')">
+                    <span class="fc-icon fc-icon-right-single-arrow"></span>
+                  </button>
+                </div>
+                <h2>Month</h2>
+                <div style="margin-left:150px;">
+                  <h2><%= @days_from_this_week.first.to_formatted_s(:short) %> – <%= @days_from_this_week.to_a.last.to_formatted_s(:rfc822) %></h2>
+                </div>
+
+
               </div>
-              <h2>Week</h2>
-
-              <div class="fc-button-group">
-                <button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left" onclick="redirect('<%= @prev_month_url %>')">
-                <span class="fc-icon fc-icon-left-single-arrow"></span>
-                </button>
-                <button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right" onclick="redirect('<%= @next_month_url %>')">
-                <span class="fc-icon fc-icon-right-single-arrow"></span>
-                </button>
+              <div class="fc-right">
+                <div class="fc-button-group">
+                </div>
               </div>
-              <h2>Month</h2>
-              <div style="margin-left:150px;">
-                <h2><%= @days_from_this_week.first.to_formatted_s(:short) %> – <%= @days_from_this_week.to_a.last.to_formatted_s(:rfc822) %></h2>
+
+              <div class="fc-center">
+
               </div>
-          
-              
+
+              <div class="fc-clear"></div>
             </div>
-            <div class="fc-right">
-            <div class="fc-button-group">
+
+
+            <div class="fc-view-container">
+              <div class="fc-view fc-agendaWeek-view fc-agenda-view">
+
+                <table class="appointments-table">
+
+                  <tr class="appointments-table-header">
+                    <td>Time Frame</td>
+                    <% @days_from_this_week.each do |day|%>
+                        <td data-date="<%= day.to_s %>"><%= day.strftime("%A") %>, <%= day.to_formatted_s(:short) %></td>
+                    <% end %>
+                  </tr>
+
+                  <tr>
+                    <td>FollowUp</td>
+                    <%= render 'events', followups: @followups, days_from_this_week: @days_from_this_week, sellerschedule: @sellerschedule, sellers: @sellers %>
+                  </tr>
+
+                  <tr>
+                    <td class="appointments-table-time">9am-10am</td>
+                    <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 9, sellerschedule: @sellerschedule, sellers: @sellers %>
+                  </tr>
+
+                  <tr>
+                    <td class="appointments-table-time">10am-11am</td>
+                    <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 10, sellerschedule: @sellerschedule, sellers: @sellers  %>
+                  </tr>
+
+                  <tr>
+                    <td class="appointments-table-time">12pm-1pm</td>
+                    <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 12, sellerschedule: @sellerschedule, sellers: @sellers %>
+                  </tr>
+
+                  <tr>
+                    <td class="appointments-table-time">2pm-3pm</td>
+                    <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 14, sellerschedule: @sellerschedule, sellers: @sellers %>
+                  </tr>
+
+                  <tr>
+                    <td class="appointments-table-time">4pm-5pm</td>
+                    <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 16, sellerschedule: @sellerschedule, sellers: @sellers %>
+                  </tr>
+
+                  <tr>
+                    <td class="appointments-table-time">6pm-7pm</td>
+                    <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 18, sellerschedule: @sellerschedule, sellers: @sellers %>
+                  </tr>
+
+                  <tr>
+                    <td class="appointments-table-time">8pm-9pm</td>
+                    <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 20, sellerschedule: @sellerschedule, sellers: @sellers %>
+                  </tr>
+
+                </table>
+              </div>
             </div>
+
+
+
           </div>
-          
-          <div class="fc-center">
-            
-          </div>
-          
-          <div class="fc-clear"></div>
-          </div>
-          
-          
-          <div class="fc-view-container">
-            <div class="fc-view fc-agendaWeek-view fc-agenda-view">
-
-              <table class="appointments-table">
-                
-                <tr class="appointments-table-header">
-                  <td>Time Frame</td>
-                  <% @days_from_this_week.each do |day|%>
-                  <td data-date="<%= day.to_s %>"><%= day.strftime("%A") %>, <%= day.to_formatted_s(:short) %></td>
-                  <% end %>
-                </tr>
-                
-                <tr>
-                  <td>FollowUp</td>
-                  <%= render 'events', followups: @followups, days_from_this_week: @days_from_this_week, sellerschedule: @sellerschedule, sellers: @sellers %>
-                </tr>
-
-                <tr>
-                  <td class="appointments-table-time">9am-10am</td>
-                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 9, sellerschedule: @sellerschedule, sellers: @sellers %>
-                </tr>
-
-                <tr>
-                  <td class="appointments-table-time">10am-11am</td>
-                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 10, sellerschedule: @sellerschedule, sellers: @sellers  %>
-                </tr>
-
-                <tr>
-                  <td class="appointments-table-time">12pm-1pm</td>
-                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 12, sellerschedule: @sellerschedule, sellers: @sellers %>
-                </tr>
-
-                <tr>
-                  <td class="appointments-table-time">2pm-3pm</td>
-                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 14, sellerschedule: @sellerschedule, sellers: @sellers %>
-                </tr>
-
-                <tr>
-                  <td class="appointments-table-time">4pm-5pm</td>
-                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 16, sellerschedule: @sellerschedule, sellers: @sellers %>
-                </tr>
-
-                <tr>
-                  <td class="appointments-table-time">6pm-7pm</td>
-                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 18, sellerschedule: @sellerschedule, sellers: @sellers %>
-                </tr>
-
-                <tr>
-                  <td class="appointments-table-time">8pm-9pm</td>
-                  <%= render 'events', appointments: @appointments, days_from_this_week: @days_from_this_week, hour: 20, sellerschedule: @sellerschedule, sellers: @sellers %>
-                </tr>
-
-              </table>
-            </div>
-          </div>
-
-          
-
         </div>
       </div>
     </div>
-  </div>
-
 
